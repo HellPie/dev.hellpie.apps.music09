@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+		android:width="640dp"
+		android:height="480dp"
+		android:viewportWidth="640"
+		android:viewportHeight="480">
+
+
+	<path
+			android:name="canvas_background"
+			android:fillColor="@android:color/transparent"
+			android:strokeWidth="1"
+			android:pathData="M-1,-1 L641.2,-1 L641.2,481.1 L-1,481.1 L-1,-1 Z" />
+
+	<path
+			android:name="svg_1"
+			android:fillColor="@android:color/transparent"
+			android:pathData="M0,0 L100,0 L100,100 L0,100 L0,0 Z" />
+
+	<path
+			android:name="triangle_left"
+			android:fillColor="#E91E63"
+			android:fillAlpha="50"
+			android:pathData="M-0.896881,198.758 L237.103,275.758 L-0.897,352.758 L-0.897,198.758 Z
+M-87.4969,461.358" />
+
+	<path
+			android:name="triangle_right"
+			android:fillColor="#E91E63"
+			android:fillAlpha="50"
+			android:pathData="M643.341,410.803 L233.141,276.303 L643.341,141.803 L643.341,410.803 Z" />
+	<path
+			android:name="quad_top"
+			android:fillColor="#E91E63"
+			android:strokeWidth="1.5"
+			android:pathData="M666.55,-33.385 L666.55,135.715 L235.05,276.615 L-196.45,135.715
+L-196.45,-33.385 L666.55,-33.385 Z" />
+</vector>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="match_parent"
+				android:layout_height="75dp"
+		android:layout_marginTop="-3dp"
+		android:layout_marginBottom="-3dp">
+
+
+	<View
+			android:id="@+id/_top_shadow"
+			android:layout_width="match_parent"
+			android:layout_height="3dp"
+			android:layout_alignParentTop="true"
+			android:background="@drawable/elevation_shadow"
+			android:rotation="180" />
+
+	<View
+			android:id="@+id/_bottom_shadow"
+			android:layout_width="match_parent"
+			android:layout_height="3dp"
+			android:layout_alignParentBottom="true"
+			android:background="@drawable/elevation_shadow" />
+
+	<View
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:layout_below="@id/_top_shadow"
+			android:layout_above="@id/_bottom_shadow"
+			android:background="#FFF" />
+
+	<View
+			android:id="@+id/_bottom_border"
+			android:layout_width="match_parent"
+			android:layout_height="0.1dp"
+			android:layout_above="@id/_bottom_shadow"
+			android:background="@color/colorAccent" />
+
+	<de.hdodenhof.circleimageview.CircleImageView
+			android:id="@+id/album_art"
+			android:layout_width="48dp"
+			android:layout_height="48dp"
+			android:layout_marginStart="16dp"
+			android:layout_marginEnd="16dp"
+			android:layout_centerVertical="true"
+			android:src="@drawable/album_art"
+			xmlns:app="http://schemas.android.com/apk/res-auto"
+			app:civ_border_color="@color/colorAccent"
+			app:civ_border_width="4dp"/>
+
+	<ImageButton
+			android:id="@+id/play_album"
+			android:layout_width="24dp"
+			android:layout_height="24dp"
+			android:layout_centerVertical="true"
+			android:layout_alignParentEnd="true"
+			android:layout_marginEnd="16dp"
+			android:layout_marginStart="16dp"
+			style="@style/Base.Widget.AppCompat.Button.Borderless"
+			android:src="@drawable/ic_play_circle_filled"
+			android:scaleX="1.5"
+			android:scaleY="1.5" />
+
+	<RelativeLayout
+			android:id="@+id/song_info"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_centerVertical="true"
+			android:layout_toEndOf="@id/album_art"
+			android:layout_toStartOf="@id/play_album">
+
+		<TextView
+				android:id="@+id/song_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+				android:textStyle="bold"
+				android:maxLines="1"
+				android:text="I Knew You Were Trouble" />
+
+		<TextView
+				android:id="@+id/album_name"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_below="@id/song_title"
+				android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
+				android:maxLines="1"
+				android:textColor="@android:color/tertiary_text_light"
+				android:text="Taylor Swift   ·   Red" />
+	</RelativeLayout>
+</RelativeLayout>
