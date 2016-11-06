@@ -13,8 +13,9 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~  limitations under the License.
--->
+  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+		  xmlns:tools="http://schemas.android.com/tools"
 		  package="dev.hellpie.apps.music09.concept">
 
 	<application
@@ -22,8 +23,16 @@
 			android:icon="@mipmap/ic_launcher"
 			android:label="@string/app_name"
 			android:supportsRtl="true"
-			android:theme="@style/SongsTheme">
+			android:theme="@style/SongsTheme"
+			tools:ignore="AllowBackup,GoogleAppIndexingWarning">
 		<activity android:name=".MainActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".SplashActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 
