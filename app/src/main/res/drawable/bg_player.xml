@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -35,19 +35,19 @@
 
 	<path
 			android:name="triangle_left"
-			android:fillColor="#E91E63"
+			android:fillColor="@android:color/white"
 			android:fillAlpha="50"
 			android:pathData="M-0.896881,198.758 L237.103,275.758 L-0.897,352.758 L-0.897,198.758 Z
 M-87.4969,461.358" />
 
 	<path
 			android:name="triangle_right"
-			android:fillColor="#E91E63"
+			android:fillColor="@android:color/white"
 			android:fillAlpha="50"
 			android:pathData="M643.341,410.803 L233.141,276.303 L643.341,141.803 L643.341,410.803 Z" />
 	<path
 			android:name="quad_top"
-			android:fillColor="#E91E63"
+			android:fillColor="@android:color/white"
 			android:strokeWidth="1.5"
 			android:pathData="M666.55,-33.385 L666.55,135.715 L235.05,276.615 L-196.45,135.715
 L-196.45,-33.385 L666.55,-33.385 Z" />

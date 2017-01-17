@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,9 +16,10 @@
   -->
 
 <resources>
-	<color name="colorPrimary">#3F51B5</color>
-	<color name="colorPrimaryDark">#303F9F</color>
+	<color name="colorPrimary">#E91E63</color>
+	<color name="colorPrimaryDark">#C2185B</color>
 	<color name="colorAccent">#FF4081</color>
 
-	<color name="songs_list_background">#EEEEEE</color>
+	<color name="shadowColor">#FF4081</color>
+	<color name="windowBackground">#EEEEEE</color>
 </resources>
