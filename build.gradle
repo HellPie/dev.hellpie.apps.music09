@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Diego Rossi (@_HellPie)
+ * Copyright 2017 Diego Rossi (@_HellPie)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ buildscript {
 		jcenter()
 	}
 	dependencies {
-		classpath 'com.android.tools.build:gradle:2.2.2'
+		classpath 'com.android.tools.build:gradle:2.3.0-beta2'
 
 		// NOTE: Do not place your application dependencies here; they belong
 		// in the individual module build.gradle files
