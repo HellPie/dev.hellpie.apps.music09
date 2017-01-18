@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Diego Rossi (@_HellPie)
+ * Copyright 2017 Diego Rossi (@_HellPie)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,59 +19,53 @@ package dev.hellpie.apps.music09.concept.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.PowerManager;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.StringDef;
-import android.support.v4.app.NotificationCompat;
-import android.util.Log;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.util.LongSparseArray;
 
 import java.io.IOException;
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
-import dev.hellpie.apps.music09.concept.R;
 import dev.hellpie.apps.music09.concept.listeners.MediaPlayerListener;
 import dev.hellpie.apps.music09.concept.listeners.MediaRetrieverListener;
-import dev.hellpie.apps.music09.concept.media.MediaBindingLayer;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
-import dev.hellpie.apps.music09.concept.media.MediaRetriever;
+import dev.hellpie.apps.music09.concept.media.models.Album;
+import dev.hellpie.apps.music09.concept.media.models.Artist;
+import dev.hellpie.apps.music09.concept.media.models.Playlist;
 import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.ui.activities.MainActivity;
+import dev.hellpie.apps.music09.concept.utils.MessagingUtils;
 
+/**
+ * Music Player Service class.
+ *
+ * This class is @Deprecated, it is now integrated in PlayerActivity.
+ * This class is queued for planned rewriting and updating for the future major release of
+ * the application.
+ */
+@Deprecated
 public class MusicPlayerService
 		extends Service
 		implements MediaPlayerListener,
 			MediaRetrieverListener,
 			AudioManager.OnAudioFocusChangeListener {
 
-	public static final String BUNDLE_KEY_MAGIC = "dev.hellpie.apps.music09.concept.services.MAGIC";
-
-	// TODO: Add docs and stuff for @StringDef
-	@Retention(RetentionPolicy.SOURCE)
-	@StringDef({_ACTION_PLAY, _ACTION_PAUSE, _ACTION_TOGGLE_PLAYBACK, _ACTION_STOP, _ACTION_REWIND, _ACTION_SKIP, _ACTION_GO_BACK})
-	public @interface _Action {}
-	// TODO: Add docs about naming convention and why it's needed
-	public static final String _ACTION_PLAY = "dev.hellpie.apps.music09.ACTION_PLAY";
-	public static final String _ACTION_PAUSE = "dev.hellpie.apps.music09.ACTION_PAUSE";
-	public static final String _ACTION_TOGGLE_PLAYBACK = "dev.hellpie.apps.music09.ACTION_TOGGLE_PLAYBACK";
-	public static final String _ACTION_STOP = "dev.hellpie.apps.music09.ACTION_STOP";
-	public static final String _ACTION_REWIND = "dev.hellpie.apps.music09.ACTION_REWIND";
-	public static final String _ACTION_SKIP = "dev.hellpie.apps.music09.ACTION_SKIP";
-	public static final String _ACTION_GO_BACK = "dev.hellpie.apps.music09.ACTION_GO_BACK";
-
-	// TODO: Add docs and stuff for @IntDef
+	/**
+	 * Represent the type of message to send to the Service.
+	 */
 	@Retention(RetentionPolicy.SOURCE)
 	@IntDef({ACTION_PLAY, ACTION_PAUSE, ACTION_TOGGLE_PLAYBACK, ACTION_STOP, ACTION_SEEK,
 			ACTION_REWIND, ACTION_SKIP, ACTION_GO_BACK, MAGIC_CONNECT, MAGIC_DISCONNECT})
@@ -108,11 +102,11 @@ public class MusicPlayerService
 	 */
 	@Documented
 	@Retention(RetentionPolicy.SOURCE)
-	@IntDef({STATE_NORMAL, STATE_DUCKING, STATE_MUTED})
+	@IntDef({STATE_NORMAL, STATE_DUCKING, STATE_MUTING})
 	public @interface AudioState {}
 	public static final int STATE_NORMAL = 0x0010; // Audio focus present
 	public static final int STATE_DUCKING = 0x0020; // No audio focus, but playing ducked
-	public static final int STATE_MUTED = 0x0030; // No audio focus, can't play, can't duck either
+	public static final int STATE_MUTING = 0x0030; // No audio focus, can't play, can't duck either
 
 	/**
 	 * Defines why the music stopped playing.
@@ -144,22 +138,31 @@ public class MusicPlayerService
 	 */
 	@Nullable
 	private Messenger clientMessenger;
+	private static final Object clientMessengerLock = new Object();
 
-	private MediaPlayer player;
-	private AudioManager audioManager;
-
-	private Bitmap defaultAlbumArt;
-
-	// State Machine current info
+	// Current State Machine data
 	private @ServiceState int serviceState = STATE_RETRIEVING;
-	private @AudioState int audioState = STATE_MUTED;
+	private @AudioState int audioState = STATE_MUTING;
 	private @PauseReason int pauseReason = REASON_FOCUS;
 
-	private Song currentSong;
-	private boolean resumePlayback;
+	// Media Player data
+	private MediaPlayer mediaPlayer;
 
-	private List<Song> playingQueue = new ArrayList<>();
-	private List<Song> playedSongs = new ArrayList<>();
+	// Service data
+	private static PowerManager.WakeLock wakeLock; // To avoid Deep Sleep
+	private Timer eventTimer;
+	private Looper serviceLooper;
+
+	// Music related data
+	private LongSparseArray<Song> playingQueue = new LongSparseArray<>(100);
+	private LongSparseArray<Song> playedDeque = new LongSparseArray<>(100);
+	int currentSong = 0; // Current playing song index
+	private long pauseTime = Long.MAX_VALUE; // Point in the song where we last paused playback
+
+	// System service references
+	AudioManager audioManager;
+	NotificationManagerCompat notificationManager;
+
 
 	public MusicPlayerService() {
 	}
@@ -167,77 +170,24 @@ public class MusicPlayerService
 	@Override
 	public void onCreate() {
 		super.onCreate();
+//
+//		// Load the music library
+//		new MediaRetriever(getApplicationContext()).loadLibraryAsync(this);
+//
+//		// Initialize the AudioManager, which is a System-wide Singleton
+//		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//
+//		// Get a default album art for when the song does not specify one
+//		defaultAlbumArt = BitmapFactory.decodeResource(getResources(), R.drawable.album_art);
 
-		// Load the music library
-		new MediaRetriever(getApplicationContext()).loadLibraryAsync(this);
+		// Initialize all the stuff the Service will need
 
-		// Initialize the AudioManager, which is a System-wide Singleton
+		// Load the MediaPlayer and configure it for this Service.
+		initializeMediaPlayer();
+
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
-		// Get a default album art for when the song does not specify one
-		defaultAlbumArt = BitmapFactory.decodeResource(getResources(), R.drawable.album_art);
-	}
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
-
-		String command = intent.getAction();
-
-		Log.d(getClass().getSimpleName(), String.format("Started with: %s", command));
-
-		// Unfortunately we cannot switch() the intent's command because String is a really
-		// interesting fucked up concept for a primitive type...
-		if(command.equals(_ACTION_PLAY)) {
-			MediaBindingLayer.get().scheduleActionChange(_ACTION_PLAY);
-			play();
-		} else if(command.equals(_ACTION_PAUSE)) {
-			MediaBindingLayer.get().scheduleActionChange(_ACTION_PAUSE);
-			pause();
-		} else if(command.equals(_ACTION_TOGGLE_PLAYBACK)) {
-			if(serviceState == STATE_PAUSED || serviceState == STATE_STOPPED) {
-				MediaBindingLayer.get().scheduleActionChange(_ACTION_PLAY);
-				play();
-			} else {
-				MediaBindingLayer.get().scheduleActionChange(_ACTION_PAUSE);
-				pause();
-			}
-		} else if(command.equals(_ACTION_STOP)) {
-			if(serviceState == STATE_PAUSED || serviceState == STATE_READY) {
-				MediaBindingLayer.get().scheduleActionChange(_ACTION_STOP);
-				serviceState = STATE_STOPPED;
-				releaseResources(true);
-				abandonAudioFocus();
-				stopSelf(); // Close the Service
-			}
-		} else if(command.equals(_ACTION_SKIP)) {
-			if(serviceState == STATE_READY || serviceState == STATE_PAUSED) {
-				MediaBindingLayer.get().scheduleActionChange(_ACTION_SKIP);
-				requestAudioFocus();
-				playNext(null);
-			}
-		} else if(command.equals(_ACTION_REWIND)) {
-			if(serviceState == STATE_READY || serviceState == STATE_PAUSED) {
-				MediaBindingLayer.get().scheduleActionChange(_ACTION_REWIND);
-				int percentage = player.getCurrentPosition() / player.getDuration();
-				if(player.getCurrentPosition() == 0 || percentage < 0.05) {
-					// Rewind one song and reload it
-					playingQueue.add(playedSongs.remove(playedSongs.size() - 1));
-					currentSong = playingQueue.remove(playingQueue.size() - 1);
-					requestAudioFocus();
-					playNext(null);
-				} else {
-					player.seekTo(0);
-				}
-			}
-		} else if(command.equals(_ACTION_GO_BACK)) {
-			MediaBindingLayer.get().scheduleActionChange(_ACTION_GO_BACK);
-			// Rewind one song and reload it
-			playingQueue.add(playedSongs.remove(playedSongs.size() - 1));
-			currentSong = playingQueue.remove(playingQueue.size() - 1);
-			playNext(null);
-		}
-
-		return START_NOT_STICKY; // Tell the system we don't want this service to be auto-restarted
+		// Music Playback data
 	}
 
 	@Override
@@ -246,237 +196,274 @@ public class MusicPlayerService
 	}
 
 	@Override
+	public boolean onUnbind(Intent intent) {
+		return false; // We don't want to kill the service!
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
+//
+//		// Cleanup states, this is basically the GC of the Service's functions
+//		serviceState = STATE_STOPPED;
+//		releaseResources(true);
+//		abandonAudioFocus();
 
-		// Cleanup states, this is basically the GC of the Service's functions
+		// Cleanup certain states since they are stored outside this instance
+
+		// Drop audio focus back to the system
+		if(audioManager != null) audioManager.abandonAudioFocus(this);
+
+		mediaPlayer.stop();
+		mediaPlayer.reset();
+		mediaPlayer.release();
+
 		serviceState = STATE_STOPPED;
-		releaseResources(true);
-		abandonAudioFocus();
 	}
 
 	@Override
 	public void onMediaLoadingComplete() {
-
-		// We are done retrieving so move into STOPPED
-		serviceState = STATE_STOPPED;
-
-		if(resumePlayback) {
-			requestAudioFocus();
-			// play song -> last song || play song -> random(?) song
-		}
+//
+//		// We are done retrieving so move into STOPPED
+//		serviceState = STATE_STOPPED;
+//
+//		if(resumePlayback) {
+//			requestAudioFocus();
+//			// play song -> last song || play song -> random(?) song
+//		}
 	}
 
 	@Override
 	public void onPrepared(MediaPlayer mediaPlayer) {
-
+		mediaPlayer.start();
+		serviceState = STATE_READY;
 	}
 
 	@Override
 	public void onCompletion(MediaPlayer mediaPlayer) {
+		if(playingQueue.size() == 0) {
+			for(int i = 0; i < playedDeque.size(); i++) {
+				Song song = playedDeque.valueAt(i);
+				if(song ==  null) {
+					stopSelf();
+					return;
+				}
+				playingQueue.append(song.getId(), song);
+			}
+		}
 
+		serviceState = STATE_READY;
+		nextSong();
 	}
 
 	@Override
 	public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+		mediaPlayer.reset();
 		return false;
 	}
 
 	@Override
 	public void onAudioFocusChange(int i) {
+//		switch(i) {
+//			case AudioManager.AUDIOFOCUS_GAIN:
+//				audioState = STATE_NORMAL;
+//				if(serviceState != STATE_READY) return; // Don't restart player, no changes
+//			case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+//				audioState = STATE_DUCKING;
+//				if(player == null || !player.isPlaying()) return; // Don't restart player, no changes
+//			case AudioManager.AUDIOFOCUS_LOSS:
+//			case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+//				audioState = STATE_MUTING;
+//				if(player == null || !player.isPlaying()) return; // Don't restart player, no changes
+//				break;
+//			default:
+//				return; // We don't care about other cases, these are the only one affecting playback
+//		}
+//
+//		// Always update the player (or create it) if the State Machine changed
+//		refreshMediaPlayer();
 		switch(i) {
 			case AudioManager.AUDIOFOCUS_GAIN:
-				audioState = STATE_NORMAL;
-				if(serviceState != STATE_READY) return; // Don't restart player, no changes
-			case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-				audioState = STATE_DUCKING;
-				if(player == null || !player.isPlaying()) return; // Don't restart player, no changes
+				initializeMediaPlayer();
+				if(audioState != STATE_NORMAL) {
+					audioState = STATE_NORMAL;
+					resumePlaying();
+				}
+				break;
 			case AudioManager.AUDIOFOCUS_LOSS:
 			case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-				audioState = STATE_MUTED;
-				if(player == null || !player.isPlaying()) return; // Don't restart player, no changes
+				audioState = STATE_MUTING;
+				pause();
+				break;
+			case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+				if(mediaPlayer != null) mediaPlayer.setVolume(VOLUME_DUCKING, VOLUME_DUCKING);
+				audioState = STATE_DUCKING;
 				break;
 			default:
-				return; // We don't care about other cases, these are the only one affecting playback
+				break;
 		}
-
-		// Always update the player (or create it) if the State Machine changed
-		updateMediaPlayer();
 	}
 
-	/**
-	 * Makes sure the MediaPlayer instance exists, is clean and ready for a new session.
-	 */
-	private void initMediaPlayer() {
-		if(player != null) {
-			player.reset();
-			return;
-		}
+	// MediaPlayer Management
+	private void resumePlaying() {
+		if(serviceState == STATE_STOPPED || serviceState == STATE_RETRIEVING) return;
 
-		// Need to create a new MediaPlayer
+		mediaPlayer.start();
+		mediaPlayer.setVolume(1.0f, 1.0f);
 
-		// The MediaPlayer needs to be set to partially wake lock because when the screen is off
-		// especially in API23+ (Doze Mode) the system tries to freeze all the processes
-		// to save battery. This stops the MediaPlayer from playing music, which is an unpleasant
-		// experience for the average user.
-		player = new MediaPlayer();
-		player.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
-		player.setOnPreparedListener(this);
-		player.setOnCompletionListener(this);
-		player.setOnErrorListener(this);
+		serviceState = STATE_READY;
 	}
 
-	/**
-	 * Updates the MediaPlayer to match the new audio state.
-	 */
-	private void updateMediaPlayer() {
-		if(player == null) initMediaPlayer(); // Just in case we lost it somewhere
-
-		if(audioState == STATE_MUTED && player.isPlaying()) {
-			player.pause(); // We simply won't be played by the system anymore so pause 'til later
-			return; // Stop here otherwise the last if block will resume the player
-		} else if(audioState == STATE_DUCKING) {
-			player.setVolume(VOLUME_DUCKING, VOLUME_DUCKING);
+	private void toggle() {
+		if(mediaPlayer.isPlaying()) {
+			pause();
 		} else {
-			player.setVolume(1.0f, 1.0f); // Restore normal volume in case we were ducking before
+			play(null);
 		}
-
-		if(!player.isPlaying()) player.start(); // Restore normal functions since we aren't MUTED
 	}
 
-	private void play() {
-		if(serviceState == STATE_RETRIEVING) {
-			resumePlayback = true;
-			return;
+	private void play(Object object) {
+		if(mediaPlayer.isPlaying()) return;
+
+		if(object == null) return;
+
+		Class objClass = object.getClass();
+		if(objClass.isInstance(Song.class)) {
+			playingQueue.clear();
+			playedDeque.clear();
+			playingQueue.append(((Song)object).getId(), (Song) object);
+		} else if(objClass.isInstance(Album.class)) {
+			playingQueue.clear();
+			playedDeque.clear();
+			List<Song> songs = MediaLibrary.getSongs((Album) object);
+			for(Song song : songs) {
+				playingQueue.append(song.getId(), song);
+			}
+		} else if(objClass.isInstance(Artist.class)) {
+			playingQueue.clear();
+			playedDeque.clear();
+			List<Song> songs = MediaLibrary.getSongs((Album) object);
+			for(Song song : songs) {
+				playingQueue.append(song.getId(), song);
+			}
+		} else if(objClass.isInstance(Playlist.class)) {
+			playingQueue.clear();
+			playedDeque.clear();
+			List<Song> songs = MediaLibrary.getSongs();
+			for(Song song: songs) {
+				playingQueue.append(song.getId(), song);
+			}
 		}
 
-		requestAudioFocus();
-
-		if(serviceState == STATE_STOPPED) {
-			playNext(null);
-		} else if(serviceState == STATE_PAUSED) {
-			serviceState = STATE_READY;
-			// TODO: Media Player notification
-			startForeground(NOTIFICATION_ID, new NotificationCompat.Builder(getApplicationContext()).build());
-			updateMediaPlayer();
-		}
+		resumePlaying();
 	}
 
 	private void pause() {
-		if(serviceState == STATE_RETRIEVING) {
-			resumePlayback = false;
+		if(!mediaPlayer.isPlaying()) return;
+
+		mediaPlayer.pause();
+		notifyEvent(MainActivity.EVENT_PAUSED);
+	}
+
+	private void stop() {
+		//
+	}
+
+	@SuppressWarnings("UnusedParameters")
+	private void seek(int arg1) {
+		//
+	}
+
+	private void skip() {
+		nextSong();
+		notifyEvent(MainActivity.EVENT_CHANGED, playingQueue.valueAt(currentSong));
+	}
+
+	private void rewind() {
+		if(mediaPlayer.getCurrentPosition() >= 100) previous();
+		mediaPlayer.seekTo(0);
+
+		notifyEvent(MainActivity.EVENT_SEEK, 0);
+	}
+
+	private void previous() {
+		//
+	}
+
+	private void nextSong() {
+		serviceState = STATE_READY;
+		//noinspection ConstantConditions
+		if(serviceState != STATE_READY && serviceState != STATE_PAUSED) return;
+
+		if(currentSong == playingQueue.size() - 1) {
+			currentSong = 0;
+		} else {
+			currentSong++;
+		}
+
+		try {
+			Song song = playingQueue.valueAt(currentSong);
+			if(song == null) {
+				stopSelf();
+				return;
+			}
+			mediaPlayer.setDataSource(song.getLocation());
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void updateNotification() {
+		//
+	}
+
+	private void removeNotification() {
+		//
+	}
+
+	private void setServiceState(@ServiceState int state) {
+		if(state == serviceState) return;
+		serviceState = state;
+	}
+
+	private void setAudioState(@AudioState int state) {
+		if(state == audioState) return;
+		audioState = state;
+	}
+
+	private void setPauseReason(@PauseReason int reason) {
+		if(reason == pauseReason) return;
+		pauseReason = reason;
+	}
+
+	private void refreshMediaPlayer() {
+		//
+	}
+
+	private void initializeMediaPlayer() {
+		if(mediaPlayer != null) { // Avoid rebuilding everything if possible
+			mediaPlayer.reset();
 			return;
 		}
 
-		if(serviceState == STATE_READY) {
-			serviceState = STATE_PAUSED;
-			player.pause();
-			releaseResources(false);
-		}
+		// Initialize the MediaPlayer instance for this Service, it might be destroyed by us later
+		mediaPlayer = new MediaPlayer();
+
+		// WakeLocks avoid the CPU to go to sleep when the screen is off so that music keeps playing
+		mediaPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+
+		// Set Listeners for the MediaPlayer to know what's happening to it
+		mediaPlayer.setOnPreparedListener(this); // Ready to play
+		mediaPlayer.setOnCompletionListener(this); // Done playing
+		mediaPlayer.setOnErrorListener(this); // Whoopsies
 	}
 
-	/**
-	 * Plays a song, first trying to play the one defined by uri.
-	 * If uri is null then check if we have played a song before this one. If we did play the song
-	 * after that one, otherwise play a random song.
-	 * @param uri The URI of the song to play
-	 */
-	private void playNext(String uri) {
-
-		// We are prepared to start playing
-		serviceState = STATE_STOPPED;
-
-		// Clean up and prepare for a new session
-		releaseResources(false);
-
-		try {
-
-			updateMediaPlayer();
-			player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
-			if(uri != null) { // Play from the given URI
-				player.setDataSource(getApplicationContext(), Uri.parse(uri));
-				currentSong = new Song.Builder()
-						.withLocation(uri)
-						.build();
-			} else {
-
-				if(currentSong == null) {
-					currentSong = MediaLibrary.getRandomSong();
-					if(currentSong == null) {
-						stopSelf();
-						return;
-					}
-				} else {
-					if(playingQueue.size() < 1) {
-						playingQueue = MediaLibrary.getSongs();
-						playedSongs.clear();
-					}
-
-					if(playingQueue.size() >= 1) {
-						currentSong = playingQueue.remove(playingQueue.size() - 1);
-						playedSongs.add(currentSong);
-					} else {
-						// stop player
-						return;
-					}
-				}
-
-				if(currentSong == null) {
-					// stop player
-					return;
-				}
-
-				player.setDataSource(getApplicationContext(), Uri.parse(currentSong.getLocation()));
-				MediaBindingLayer.get().scheduleSongChange(currentSong);
-			}
-
-		} catch(IOException ignored) {
-
-		}
+	private void notifyEvent(@MainActivity.Event int event) {
+		notifyEvent(event, null);
 	}
 
-	/**
-	 * Cleans up the Service.
-	 * This will be called only when the Service does not need to run anymore.
-	 * @param wipe If the method should also fully release and delete the MediaPlayer
-	 */
-	private void releaseResources(boolean wipe) {
-
-		// Stop running in the foreground and kill the notifications controlled by this Service
-		stopForeground(true);
-
-		if(wipe && player != null) {
-			player.reset();
-			player.release();
-			player = null; // Destroy the player after cleaning up its resources and states
-		}
-	}
-
-	/**
-	 * Try to obtain audio focus.
-	 */
-	public void requestAudioFocus() {
-		if(audioState == STATE_NORMAL) return; // We already have focus
-
-		// Ask the system to give us focus
-		boolean result = AudioManager.AUDIOFOCUS_REQUEST_GRANTED == audioManager.requestAudioFocus(
-				this,
-				AudioManager.STREAM_MUSIC,
-				AudioManager.AUDIOFOCUS_GAIN
-		);
-
-		if(result) audioState = STATE_NORMAL;
-	}
-
-	/**
-	 * Try to abandon audio focus and release it to other applications.
-	 */
-	public void abandonAudioFocus() {
-		if(audioState != STATE_NORMAL) return;
-		if(AudioManager.AUDIOFOCUS_REQUEST_GRANTED == audioManager.abandonAudioFocus(this)) {
-			audioState = STATE_MUTED;
-		}
+	private void notifyEvent(@MainActivity.Event int event, Object attachment) {
+		MessagingUtils.send(clientMessenger, event, attachment);
 	}
 
 	private static class ActionHandler extends LeakSafeHandler<MusicPlayerService> {
@@ -489,44 +476,38 @@ public class MusicPlayerService
 		public boolean handleMessage(Message message, MusicPlayerService reference) {
 			switch(message.what) {
 				case ACTION_TOGGLE_PLAYBACK:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.toggle();
 					break;
 				case ACTION_PLAY:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.play(message.obj);
 					break;
 				case ACTION_PAUSE:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.pause();
 					break;
 				case ACTION_STOP:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.stop();
 					break;
 				case ACTION_SEEK:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.seek(message.arg1);
 					break;
 				case ACTION_SKIP:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.skip();
 					break;
 				case ACTION_REWIND:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.rewind();
 					break;
 				case ACTION_GO_BACK:
-					if(reference == null) break;
-					//
+					if(reference != null) reference.previous();
 					break;
 				case MAGIC_CONNECT:
-					if(reference == null) break;
-					reference.clientMessenger = message.replyTo;
+					synchronized(clientMessengerLock) {
+						if(reference != null) reference.clientMessenger = message.replyTo;
+					}
 					break;
 				case MAGIC_DISCONNECT:
-					if(reference == null) break;
-					reference.clientMessenger = null;
+					synchronized(clientMessengerLock) {
+						if(reference != null) reference.clientMessenger = null;
+					}
 					break;
 				default:
 					return false;
