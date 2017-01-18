@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,12 +17,10 @@
 
 <resources>
 
-
-	<style name="SongsTheme" parent="Theme.AppCompat.Light.NoActionBar">
-		<item name="colorPrimary">#FFF</item>
-		<item name="colorPrimaryDark">#FFF</item>
-		<item name="colorAccent">@color/colorAccent</item>
+	<style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
 		<item name="android:windowLightStatusBar">true</item>
-		<item name="android:shadowColor">#FF4081</item>
+		<item name="android:statusBarColor">?android:attr/colorBackground</item>
+		<item name="android:navigationBarColor">?android:attr/colorBackground</item>
+		<item name="android:windowBackground">@drawable/layerlist_splash_screen</item>
 	</style>
 </resources>

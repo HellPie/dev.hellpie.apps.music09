@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,5 +15,22 @@
   -->
 
 <resources>
-	<string name="app_name">Music #09</string>
+	<string name="app_name" translatable="false">Music #09</string>
+
+	<!--~~~~~~~~~~ Music Player Templates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="album_info_template" translatable="false">%s   ·   %s</string>
+
+	<!--~~~~~~~~~~ Music Chooser Custom Items ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="all_songs">Shuffle All</string>
+
+	<!--~~~~~~~~~~ Accessibility Descriptions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="description_toggle_play_pause">Toggle Play/Pause</string>
+	<string name="description_previous_song">Previous Song</string>
+	<string name="description_next_song">Next Song</string>
+	<string name="description_album_art">Album Art</string>
+
+	<!--~~~~~~~~~~ Permissions Utils Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="permissions_read_storage">The permission to read your files is needed by this app to load your music, your album arts and play your favorite tracks.\nPlease grant access to this permission, we promise you this app does not (and will never) use it for anything else.</string>
+	<string name="permissions_accept_button">Grant</string>
+	<string name="permissions_cancel_button">Quit</string>
 </resources>

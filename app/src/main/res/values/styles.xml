@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -16,20 +16,17 @@
 
 <resources>
 
-	<!-- Base application theme. -->
 	<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-		<!-- Customize your theme here. -->
-		<item name="colorPrimary">#E91E63</item>
-		<item name="colorPrimaryDark">#C2185B</item>
+		<item name="colorPrimary">@color/colorPrimary</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 		<item name="colorAccent">@color/colorAccent</item>
+
+		<item name="android:shadowColor">@color/shadowColor</item>
+		<item name="android:windowBackground">@color/windowBackground</item>
 	</style>
 
-	<style name="SongsTheme" parent="Theme.AppCompat.Light.NoActionBar">
-		<item name="colorPrimary">#FFF</item>
-		<item name="colorPrimaryDark">#FFF</item>
-		<item name="colorAccent">@color/colorAccent</item>
-		<item name="android:shadowColor">#FF4081</item>
-		<item name="android:windowBackground">@color/songs_list_background</item>
+	<style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
+		<item name="android:navigationBarColor">?android:attr/colorBackground</item>
+		<item name="android:windowBackground">@drawable/layerlist_splash_screen</item>
 	</style>
-
 </resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~  limitations under the License.
+  -->
+
+<resources>
+	<!--~~~~~~~~~~ Music Chooser Custom Items ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="all_songs">Riproduzione Casuale</string>
+	<!--~~~~~~~~~~ Accessibility Descriptions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="description_toggle_play_pause">Ferma/riprendi riproduzione</string>
+	<string name="description_previous_song">Canzone precedente</string>
+	<string name="description_next_song">Canzone successiva</string>
+	<string name="description_album_art">Copertina dell\'album</string>
+
+	<!--~~~~~~~~~~ Permissions Utils Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="permissions_read_storage">I permessi per leggere la memoria interna del dispositivo sono necessari a questa applicazione per poter leggere la tua musica, mostrarti le copertine dei tuoi album e riprodurre le tue tracce preferite.\nPer favore, garantisci accesso ai permessi richiesti, ti promettiamo che l\'applicazione non li usa (e mai li userà) per altri scopi oltre alla riproduzione musicale.</string>
+	<string name="permissions_accept_button">Garantisci</string>
+	<string name="permissions_cancel_button">Esci</string>
+</resources>
