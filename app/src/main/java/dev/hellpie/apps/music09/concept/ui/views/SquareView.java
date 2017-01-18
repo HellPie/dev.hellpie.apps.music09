@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Diego Rossi (@_HellPie)
+ * Copyright 2017 Diego Rossi (@_HellPie)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
  *  limitations under the License.
  */
 
-package dev.hellpie.apps.music09.concept.views;
+package dev.hellpie.apps.music09.concept.ui.views;
 
 import android.content.Context;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 
-
+/**
+ * Simple extension of ImageView made to forcefully render an image in a square.
+ */
 public class SquareView extends AppCompatImageView {
 
 	public SquareView(Context context) {
@@ -40,6 +42,9 @@ public class SquareView extends AppCompatImageView {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 		int width = getMeasuredWidth();
-		setMeasuredDimension(width, width);
+		int height = getMeasuredHeight();
+
+		int size = (width < height ? width : height);
+		setMeasuredDimension(size, size);
 	}
 }
