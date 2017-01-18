@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -18,27 +18,66 @@
 		  xmlns:tools="http://schemas.android.com/tools"
 		  package="dev.hellpie.apps.music09.concept">
 
+	<!-- To play music when the screen is off, prevents Deep Sleep from knocking us down -->
+	<uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 	<application
 			android:allowBackup="true"
 			android:icon="@mipmap/ic_launcher"
 			android:label="@string/app_name"
 			android:supportsRtl="true"
-			android:theme="@style/SongsTheme"
+			android:theme="@style/AppTheme"
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-		<activity android:name=".MainActivity">
+		<activity
+				android:name=".ui.activities.MainActivity"
+				android:screenOrientation="userPortrait">
+		</activity>
+
+		<!--
+		Show a nice loading screen while the app opens, this will be fast enough to only be seen:
+			- On old devices with really crappy hardware
+			- On first open for not over a second
+			- On emulators cause they suck d***s
+        -->
+		<activity
+				android:name=".ui.activities.SplashActivity"
+				android:screenOrientation="userPortrait"
+				android:theme="@style/SplashScreen">
+
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
-
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".SplashActivity">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
 
-				<category android:name="android.intent.category.LAUNCHER" />
-			</intent-filter>
+		<activity
+				android:name=".ui.activities.PlayerActivity"
+				android:screenOrientation="userPortrait">
 		</activity>
+
+		<!--
+		Services are useful and need to be used in this kind of app because:
+			- They can run in background, they do that natively
+			- They are not connected to the app's lifecycle
+			- They can control notifications asynchronously
+			- They simply (almost) never block the rendering thread, so it's almost
+			  like they don't exist for the user, unless you're a bad dev (I hope I'm not)
+        -->
+		<service
+				android:name=".services.MusicPlayerService"
+				android:enabled="true"
+				android:exported="false">
+			<intent-filter>
+				<action android:name="dev.hellpie.apps.music09.ACTION_PLAY" />
+				<action android:name="dev.hellpie.apps.music09.ACTION_PAUSE" />
+				<action android:name="dev.hellpie.apps.music09.ACTION_TOGGLE_PLAYBACK" />
+				<action android:name="dev.hellpie.apps.music09.ACTION_STOP" />
+				<action android:name="dev.hellpie.apps.music09.ACTION_REWIND" />
+				<action android:name="dev.hellpie.apps.music09.ACTION_SKIP" />
+				<action android:name="dev.hellpie.apps.music09.ACTION_GO_BACK" />
+			</intent-filter>
+		</service>
 	</application>
 
 </manifest>
