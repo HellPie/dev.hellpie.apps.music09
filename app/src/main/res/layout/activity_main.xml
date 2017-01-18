@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  ~ Copyright 2016 Diego Rossi (@_HellPie)
+  ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,72 +15,77 @@
   ~  limitations under the License.
   -->
 
+
+<!-- ORIGINAL INSPIRATION FROM: https://dribbble.com/shots/2916065-Daily-Ui-09music -->
+<!-- I listen to metal, I don't expect this UI too be good looking with metal album covers. -->
 <RelativeLayout
 		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:tools="http://schemas.android.com/tools"
 		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
 		android:id="@+id/activity_main"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:context="dev.hellpie.apps.music09.concept.MainActivity">
+		tools:context="dev.hellpie.apps.music09.concept.ui.activities.MainActivity">
 
 	<android.support.design.widget.AppBarLayout
-			android:id="@+id/appbarlayout"
+			android:id="@+id/_layout_appbar"
 			android:layout_height="wrap_content"
 			android:layout_width="match_parent"
 			android:elevation="0dp"
 			app:elevation="0dp">
 
 		<android.support.v7.widget.Toolbar
-				android:layout_height="?attr/actionBarSize"
-				app:titleTextColor="@android:color/white"
-				app:navigationIcon="@drawable/ic_menu"
+				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
 				android:elevation="0dp"
-				app:elevation="0dp">
+				app:elevation="0dp"
+				app:navigationIcon="@drawable/ic_queue_music">
 
 			<TextView
-					android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-					android:textColor="@android:color/white"
+					android:id="@+id/toolbar_title"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:text="Playlist"
 					android:layout_gravity="center"
-					android:id="@+id/toolbar_title" />
+					android:text="@string/app_name"
+					android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+					android:textColor="@android:color/white" />
 		</android.support.v7.widget.Toolbar>
-
 	</android.support.design.widget.AppBarLayout>
 
-	<dev.hellpie.apps.music09.concept.views.SquareView
-			android:layout_below="@id/appbarlayout"
+	<dev.hellpie.apps.music09.concept.ui.views.SquareView
+			android:id="@+id/_activity_main_background"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:background="@drawable/bg_player"/>
-
+			android:layout_below="@id/_layout_appbar"
+			android:background="@drawable/bg_player" />
 
 	<RelativeLayout
-			android:id="@+id/container_albumart"
+			android:id="@+id/_container_album_art"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginTop="96dp"
 			android:paddingStart="56dp"
 			android:paddingEnd="56dp">
 
-		<dev.hellpie.apps.music09.concept.views.SquareView
+		<dev.hellpie.apps.music09.concept.ui.views.SquareView
+				android:id="@+id/album_art"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
-				android:layout_centerInParent="true"
-				android:src="@drawable/album_art"
-				android:padding="16dp"
-				android:background="@android:color/white"
 				android:layout_margin="8dp"
-				android:elevation="4dp" />
+				android:padding="16dp"
+				android:layout_centerInParent="true"
+				android:elevation="4dp"
+				android:scaleType="fitCenter"
+				android:background="@android:color/white"
+				android:contentDescription="@string/description_album_art"/>
 	</RelativeLayout>
 
 	<RelativeLayout
+			android:id="@+id/_container_song_info"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_below="@id/container_albumart"
+			android:layout_below="@id/_container_album_art"
 			android:paddingStart="24dp"
 			android:paddingEnd="24dp"
 			android:paddingTop="24dp">
@@ -89,29 +94,30 @@
 				android:id="@+id/song_title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="@style/TextAppearance.AppCompat.Title"
 				android:layout_centerHorizontal="true"
-				android:text="I Knew You Were Troubles" />
+				android:textAppearance="@style/TextAppearance.AppCompat.Title"
+				android:textAlignment="center" />
 
 		<TextView
+				android:id="@+id/song_info"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
 				android:layout_centerHorizontal="true"
-				android:textColor="@android:color/tertiary_text_light"
 				android:layout_below="@id/song_title"
-				android:text="Taylor Swift   ·   Red" />
+				android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+				android:textAlignment="center"
+				android:textColor="@android:color/tertiary_text_light" />
 	</RelativeLayout>
 
 
 	<RelativeLayout
-			android:id="@+id/music_controls"
+			android:id="@+id/_container_music_controls"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_alignParentBottom="true"
 			android:layout_marginStart="72dp"
 			android:layout_marginEnd="72dp"
-			android:layout_marginBottom="24dp">
+			android:layout_marginBottom="24dp"
+			android:layout_alignParentBottom="true">
 
 		<android.support.design.widget.FloatingActionButton
 				android:id="@+id/controls_pause"
@@ -121,70 +127,75 @@
 				android:layout_margin="8dp"
 				app:fabSize="normal"
 				app:elevation="4dp"
-				android:src="@drawable/ic_pause"/>
+				app:backgroundTint="@android:color/white"
+				android:contentDescription="@string/description_toggle_play_pause" />
 
+		<!-- ActionButtons have circular hover/ripple shapes -->
 		<ImageButton
+				style="@style/Base.Widget.AppCompat.ActionButton"
+				android:id="@+id/controls_previous"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
 				android:layout_alignParentStart="true"
 				android:layout_toStartOf="@id/controls_pause"
 				android:scaleX="1.5"
 				android:scaleY="1.5"
+				android:elevation="0dp"
 				android:src="@drawable/ic_skip_previous"
-				android:layout_centerVertical="true"
-				style="@style/Base.Widget.AppCompat.Button.Borderless"
-				android:elevation="0dp"/>
+				android:contentDescription="@string/description_previous_song" />
 
 		<ImageButton
+				style="@style/Base.Widget.AppCompat.ActionButton"
+				android:id="@+id/controls_next"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+				android:layout_centerVertical="true"
 				android:layout_alignParentEnd="true"
 				android:layout_toEndOf="@id/controls_pause"
 				android:scaleX="1.5"
 				android:scaleY="1.5"
+				android:elevation="0dp"
 				android:src="@drawable/ic_skip_next"
-				android:layout_centerVertical="true"
-				style="@style/Base.Widget.AppCompat.Button.Borderless"
-				android:elevation="0dp"/>
+				android:contentDescription="@string/description_next_song" />
 	</RelativeLayout>
 
 	<RelativeLayout
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_above="@id/music_controls"
 			android:layout_marginStart="24dp"
-			android:layout_marginEnd="24dp">
+			android:layout_marginEnd="24dp"
+			android:layout_below="@id/_container_song_info"
+			android:layout_above="@id/_container_music_controls"
+			android:gravity="center_vertical">
 
 		<SeekBar
-				android:id="@+id/seeker"
+				android:id="@+id/song_seek_bar"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:progressTint="@color/colorAccent"
 				android:foregroundTint="@color/colorAccent"
 				android:indeterminateTint="@color/colorAccent"
-				android:progressBackgroundTint="@color/colorAccent"
-				android:max="775"
-				android:progress="417" />
+				android:progressBackgroundTint="@color/colorAccent" />
 
 		<TextView
+				android:id="@+id/song_seek_time_current"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/seeker"
+				android:layout_below="@id/song_seek_bar"
 				android:layout_alignParentStart="true"
 				android:layout_marginStart="16dp"
 				android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-				android:textColor="@android:color/tertiary_text_light"
-				android:text="02:30" />
+				android:textColor="@android:color/tertiary_text_light" />
 
 		<TextView
+				android:id="@+id/song_seek_time_total"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:layout_below="@id/seeker"
+				android:layout_below="@id/song_seek_bar"
 				android:layout_alignParentEnd="true"
 				android:layout_marginEnd="16dp"
 				android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-				android:textColor="@android:color/tertiary_text_light"
-				android:text="04:39" />
+				android:textColor="@android:color/tertiary_text_light" />
 	</RelativeLayout>
-
 </RelativeLayout>
