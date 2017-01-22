@@ -38,7 +38,6 @@ coral.db
 # - Generated folders
 bin/
 gen/
-out/
 
 # - Proguard informations
 proguard/

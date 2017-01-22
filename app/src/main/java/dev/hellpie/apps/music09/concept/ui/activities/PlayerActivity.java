@@ -17,8 +17,10 @@
 package dev.hellpie.apps.music09.concept.ui.activities;
 
 import android.animation.Animator;
+import android.app.ActivityManager;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -40,8 +42,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
-
-import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -416,9 +416,9 @@ public class PlayerActivity extends AppCompatActivity
 		String info;
 
 		// Decide the best way to display information about artist and album
-		if(Strings.isNullOrEmpty(artist) || artist.equals(MediaStore.UNKNOWN_STRING)) {
+		if(artist == null || artist.isEmpty() || artist.equals(MediaStore.UNKNOWN_STRING)) {
 			info = album;
-		} else if(Strings.isNullOrEmpty(album) || album.equals(MediaStore.UNKNOWN_STRING)) {
+		} else if(album == null || album.isEmpty() || album.equals(MediaStore.UNKNOWN_STRING)) {
 			info = artist;
 		} else {
 			info = String.format(getString(R.string.album_info_template), artist, album);
@@ -432,6 +432,7 @@ public class PlayerActivity extends AppCompatActivity
 		// Since this method MIGHT be called asynchronously, we want to make sure we use the right Thread
 		final Drawable finalAlbumArtDrawable = albumArtDrawable;
 		final String finalInfo = info;
+
 		runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -452,17 +453,28 @@ public class PlayerActivity extends AppCompatActivity
 				// Knowing we can't extract a color from a real album art, set a fixed one
 				// This is the color used in the fallback album art, we won't extract it via Palette
 				// because it's much faster to set it directly, since we know it.
+				int color = -1;
 				if(albumArtBitmap == null) {
-					updateColors(GraphicUtils.BLUE_GREY_500);
+					color = updateColors(GraphicUtils.BLUE_GREY_500);
 				} else {
-					updateColors(); // EASY: the others will do the dirty job for us (even tho I wrote the code for it...)
+					color = updateColors(); // EASY: the others will do the dirty job for us (even tho I wrote the code for it...)
 				}
+
+				String title = song.getTitle();
+				PlayerActivity.this.setTaskDescription(new ActivityManager.TaskDescription(
+						String.format("%s: %s"/* (%s)"*/,
+								getString(R.string.app_name),
+								(title.length() > 20 ? title.substring(0, 17) + "..." : title)/*,
+								(mediaPlayer != null && !mediaPlayer.isPlaying() ? "▶ Playing" : "❚ ❚ Paused")*/),
+						(albumArtBitmap == null ? BitmapFactory.decodeResource(getResources(), R.drawable.ic_audiotrack) : albumArtBitmap),
+						color
+				));
 
 			}
 		});
 	}
 
-	private void updateColors() {
+	private int updateColors() {
 		int fallbackColor;
 		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
 			fallbackColor = getResources().getColor(R.color.colorAccent, getTheme());
@@ -471,10 +483,10 @@ public class PlayerActivity extends AppCompatActivity
 			fallbackColor = getResources().getColor(R.color.colorAccent);
 		}
 
-		updateColors(GraphicUtils.extractVibrantColor(albumArtSquareView.getDrawable(), fallbackColor));
+		return updateColors(GraphicUtils.extractVibrantColor(albumArtSquareView.getDrawable(), fallbackColor));
 	}
 
-	private void updateColors(int color) {
+	private int updateColors(int color) {
 		int colorPrimaryDark = GraphicUtils.darken(color, 0.20f);
 		int colorPrimaryLight = GraphicUtils.lighten(color, 0.20f);
 
@@ -501,6 +513,8 @@ public class PlayerActivity extends AppCompatActivity
 		prevSongButton.setColorFilter(colorPrimaryLight, PorterDuff.Mode.MULTIPLY);
 		nextSongButton.setColorFilter(colorPrimaryLight, PorterDuff.Mode.MULTIPLY);
 		playPauseSongFAB.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLight));
+
+		return colorPrimaryDark;
 	}
 
 	private void animatePlayPauseFAB() {

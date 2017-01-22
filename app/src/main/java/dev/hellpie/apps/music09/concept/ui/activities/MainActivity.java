@@ -43,8 +43,6 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.google.common.base.Strings;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -378,9 +376,9 @@ public class MainActivity extends AppCompatActivity
 					String info;
 
 					// Decide the best way to display information about artist and album
-					if(Strings.isNullOrEmpty(artist)) {
+					if(artist == null || artist.isEmpty()) {
 						info = album;
-					} else if(Strings.isNullOrEmpty(album)) {
+					} else if(album == null || album.isEmpty()) {
 						info = artist;
 					} else {
 						info = String.format(getString(R.string.album_info_template), artist, album);
@@ -439,9 +437,9 @@ public class MainActivity extends AppCompatActivity
 				String info;
 
 				// Decide the best way to display information about artist and album
-				if(Strings.isNullOrEmpty(artist)) {
+				if(artist == null || artist.isEmpty()) {
 					info = album;
-				} else if(Strings.isNullOrEmpty(album)) {
+				} else if(album == null || album.isEmpty()) {
 					info = artist;
 				} else {
 					info = String.format(getString(R.string.album_info_template), artist, album);

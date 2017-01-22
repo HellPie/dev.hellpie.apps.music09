@@ -44,3 +44,9 @@
 -dontwarn java.lang.ClassValue
 -dontwarn com.google.j2objc.annotations.Weak
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+#--------------- Proguard rules for Google Guava 20.0 ---------------------------------------------#
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+-keepclasseswithmembers public class * {
+    public static void main(java.lang.String[]);
+}
