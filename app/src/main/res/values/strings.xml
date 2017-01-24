@@ -33,4 +33,7 @@
 	<string name="permissions_read_storage">The permission to read your files is needed by this app to load your music, your album arts and play your favorite tracks.\nPlease grant access to this permission, we promise you this app does not (and will never) use it for anything else.</string>
 	<string name="permissions_accept_button">Grant</string>
 	<string name="permissions_cancel_button">Quit</string>
+
+	<!--~~~~~~~~~~ Debug - GHUpdater Activity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="_debug_activity_ghupdate_label" translatable="false">Debug - GHUpdater API</string>
 </resources>

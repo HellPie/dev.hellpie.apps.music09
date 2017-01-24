@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
@@ -23,6 +22,9 @@
 	<!-- To play music when the screen is off, prevents Deep Sleep from knocking us down -->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+	<!-- To check and download updates automatically -->
+	<uses-permission android:name="android.permission.INTERNET" />
 
 	<application
 			android:allowBackup="true"
@@ -80,6 +82,16 @@
 				<action android:name="dev.hellpie.apps.music09.ACTION_GO_BACK" />
 			</intent-filter>
 		</service>
+
+		<activity
+				android:name=".libraries.ghupdater.debug._GHUpdateDebugActivity"
+				android:label="@string/_debug_activity_ghupdate_label">
+
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
 	</application>
 
 </manifest>
