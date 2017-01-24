@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.hellpie.apps.music09.concept.piemissions;
+package dev.hellpie.apps.music09.concept.libraries.piemissions;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -28,7 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import dev.hellpie.apps.music09.concept.piemissions.models.BasePiemissionsCallback;
+import dev.hellpie.apps.music09.concept.libraries.piemissions.models.BasePiemissionsCallback;
 
 public final class PiemissionsUtils {
 
