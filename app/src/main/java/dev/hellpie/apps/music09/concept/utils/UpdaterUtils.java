@@ -34,7 +34,7 @@ public class UpdaterUtils {
 
 	public static final GHConfig UPDATER_CONFIG = new GHConfig.Builder("HellPie", "dev.hellpie.apps.music09")
 			.acceptPrereleases(BuildConfig.VERSION_NAME.toLowerCase().contains("beta"))
-			.withMinimumDate(new Date(1485450000000L)) // 26-Jan-2017 18:00:00 UTC+01:00
+			.withMinimumDate(new Date(1485451800000L)) // 26-Jan-2017 18:30:00 UTC+01:00
 			.withMIMETypeFilter(new GHConfig.MIMETypeFilter() {
 				@Override
 				public boolean isValidFileName(String fileName) {
