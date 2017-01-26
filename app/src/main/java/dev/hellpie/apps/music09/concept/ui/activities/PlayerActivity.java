@@ -18,6 +18,11 @@ package dev.hellpie.apps.music09.concept.ui.activities;
 
 import android.animation.Animator;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
+import android.app.DownloadManager;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,13 +36,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.NotificationManagerCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -47,12 +57,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import dev.hellpie.apps.music09.concept.R;
+import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdateInfo;
+import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdaterUtils;
 import dev.hellpie.apps.music09.concept.listeners.MediaPlayerListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
 import dev.hellpie.apps.music09.concept.media.MediaRetriever;
@@ -60,15 +73,18 @@ import dev.hellpie.apps.music09.concept.media.models.Album;
 import dev.hellpie.apps.music09.concept.media.models.Artist;
 import dev.hellpie.apps.music09.concept.media.models.Playlist;
 import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.services.UpdateReadyReceiver;
 import dev.hellpie.apps.music09.concept.ui.resources.AnimatedPlayPauseDrawable;
 import dev.hellpie.apps.music09.concept.ui.views.SquareView;
 import dev.hellpie.apps.music09.concept.utils.GraphicUtils;
 import dev.hellpie.apps.music09.concept.utils.UIUtils;
+import dev.hellpie.apps.music09.concept.utils.UpdaterUtils;
 
 public class PlayerActivity extends AppCompatActivity
 		implements SeekBar.OnSeekBarChangeListener,
 		MediaPlayerListener,
-		MusicChooserFragment.OnMusicChosenListener {
+		MusicChooserFragment.OnMusicChosenListener,
+		UpdateReadyReceiver.UpdateReceiverCallbacks {
 
 	private final static String MUSIC_FRAGMENT = "dev.hellpie.apps.music09.concept.ui.activities.PlayerActivity.MUSIC_FRAGMENT";
 
@@ -103,13 +119,36 @@ public class PlayerActivity extends AppCompatActivity
 	private Handler timeUpdaterHandler = new Handler();
 	Runnable timeUpdaterRunnable;
 
+	private UpdateReadyReceiver updateReadyReceiver = null;
+	private GHUpdateInfo updateInfo = null;
+	private AlertDialog updateDialog = null;
+	private Snackbar updateSnackbar = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		updateReadyReceiver = new UpdateReadyReceiver(this, this);
+		registerReceiver(updateReadyReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+		registerReceiver(updateReadyReceiver, new IntentFilter(DownloadManager.ACTION_NOTIFICATION_CLICKED));
+
 		// Make the ButterKnife Library look through this Activity class and setup its annotations
 		ButterKnife.bind(this);
+
+		// While the UI is loading, try to see if we got updates
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					updateInfo = new GHUpdaterUtils(UpdaterUtils.UPDATER_CONFIG).getLatestVersion();
+				} catch(InterruptedException | ExecutionException e) {
+					e.printStackTrace();
+				}
+
+				if(updateInfo != null) new UpdaterUtils(PlayerActivity.this).download(updateInfo);
+			}
+		}).start();
 
 		// AppCompat ActionBar as Activity's Toolbar
 		setSupportActionBar(toolbar);
@@ -178,6 +217,29 @@ public class PlayerActivity extends AppCompatActivity
 				timeUpdaterHandler.postDelayed(this, 40); // Every triple buffering redraw (16ms@60fps->[3frames - computation_time])
 			}
 		};
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
+		switch(intent.getAction()) {
+			case UpdateReadyReceiver.INTENT_ACTION_CHANGELOG:
+				String name = intent.getStringExtra(UpdateReadyReceiver.INTENT_EXTRAS_TITLE);
+				String changelog = intent.getStringExtra(UpdateReadyReceiver.INTENT_EXTRAS_CHANGELOG);
+				Uri uri = intent.getData();
+				displayUpdate(name, changelog, uri);
+				break;
+			default:
+				break;
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+
+		unregisterReceiver(updateReadyReceiver);
 	}
 
 	@Override
@@ -528,5 +590,99 @@ public class PlayerActivity extends AppCompatActivity
 		animator.cancel();
 		animator.setDuration(AnimatedPlayPauseDrawable.DEFAULT_ANIMATION_DURATION)
 				.start();
+	}
+
+	@NonNull
+	@Override
+	public GHUpdateInfo getUpdateInfo() {
+		return updateInfo;
+	}
+
+	@Override
+	public void updateReady(@NonNull final String name, @NonNull final String changelog, @NonNull final Uri uri) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+
+				if(updateSnackbar != null) {
+					if(updateSnackbar.isShownOrQueued()) updateSnackbar.dismiss();
+					updateSnackbar = null;
+				}
+
+				updateSnackbar = Snackbar.make(
+						findViewById(R.id.activity_main),
+						R.string.update_available_snack_message,
+						Snackbar.LENGTH_LONG
+				).setAction(R.string.update_available_snack_action, new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						displayUpdate(name, changelog, uri);
+					}
+				}).setActionTextColor(ContextCompat.getColor(
+						PlayerActivity.this,
+						R.color.colorAccent
+				));
+			}
+		});
+	}
+
+	private void displayUpdate(@NonNull final String name, @NonNull final String changelog, final Uri uri) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+
+				final boolean ready = uri != null;
+
+				// Update the dialog if we are already showing one
+				if(updateDialog != null) {
+					Button installButton = updateDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+					if(installButton != null) {
+						installButton.setEnabled(ready);
+						installButton.setText(
+								ready ? R.string.update_available_dialog_install : R.string.update_available_dialog_wait);
+						return;
+					} else {
+						updateDialog.cancel();
+					}
+				}
+
+				// Create and show dialog if it doesn't exist
+				updateDialog = new AlertDialog.Builder(PlayerActivity.this)
+						.setTitle(String.format(getString(R.string.update_available_dialog_title), name))
+						.setMessage(changelog)
+						.setPositiveButton(
+								(ready ? R.string.update_available_dialog_install : R.string.update_available_dialog_wait),
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										if(!ready) return;
+
+										startActivity(new Intent(Intent.ACTION_VIEW)
+												.setDataAndType(
+														uri,
+														"application/vnd.android.package-archive"
+												)
+												.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+														| Intent.FLAG_GRANT_READ_URI_PERMISSION
+														| Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+										);
+
+										NotificationManagerCompat.from(PlayerActivity.this)
+												.cancel(UpdateReadyReceiver.NOTIFICATION_COMPLETED_ID);
+									}
+								}
+						).setOnCancelListener(
+								new DialogInterface.OnCancelListener() {
+									@Override
+									public void onCancel(DialogInterface dialog) {
+										updateDialog = null;
+									}
+								}
+						).setCancelable(true).show();
+
+				Button button = updateDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+				if(button != null) button.setEnabled(ready);
+			}
+		});
 	}
 }
