@@ -34,6 +34,12 @@
 	<string name="permissions_accept_button">Grant</string>
 	<string name="permissions_cancel_button">Quit</string>
 
-	<!--~~~~~~~~~~ Debug - GHUpdater Activity ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-	<string name="_debug_activity_ghupdate_label" translatable="false">Debug - GHUpdater API</string>
+	<!--~~~~~~~~~~ GHUpdater Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="update_available_snack_message">A new app version is available!</string>
+	<string name="update_available_snack_action">Install</string>
+	<string name="update_available_dialog_title">Music #09 Update: %s</string>
+	<string name="update_available_dialog_wait">Downloading…</string>
+	<string name="update_available_dialog_install">Install</string>
+	<string name="update_available_notif_changelog">See Changes</string>
+	<string name="update_available_notif_install">Install</string>
 </resources>
