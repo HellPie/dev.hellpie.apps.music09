@@ -20,7 +20,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
-import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +64,7 @@ public class _GHUpdateDebugActivity extends AppCompatActivity {
 					if(info == null) setDebug("Null Release was found.");
 					else setDebug(info.toString());
 
-				} catch(IOException e) {
+				} catch(InterruptedException | ExecutionException e) {
 					e.printStackTrace();
 				}
 			}

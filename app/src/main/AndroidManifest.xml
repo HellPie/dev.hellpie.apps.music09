@@ -14,7 +14,6 @@
   ~ See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
-
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 		  xmlns:tools="http://schemas.android.com/tools"
 		  package="dev.hellpie.apps.music09.concept">
@@ -48,13 +47,12 @@
 				android:name=".ui.activities.SplashActivity"
 				android:screenOrientation="userPortrait"
 				android:theme="@style/SplashScreen">
-
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
+
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-
 		<activity
 				android:name=".ui.activities.PlayerActivity"
 				android:screenOrientation="userPortrait">
@@ -86,12 +84,22 @@
 		<activity
 				android:name=".libraries.ghupdater.debug._GHUpdateDebugActivity"
 				android:label="@string/_debug_activity_ghupdate_label">
-
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
+
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+
+		<receiver
+				android:name=".services.UpdateReadyReceiver"
+				android:enabled="true"
+				android:exported="false">
+			<intent-filter>
+				<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+				<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
+			</intent-filter>
+		</receiver>
 	</application>
 
 </manifest>

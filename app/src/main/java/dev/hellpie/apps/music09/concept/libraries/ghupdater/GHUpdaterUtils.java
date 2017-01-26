@@ -16,11 +16,13 @@
 
 package dev.hellpie.apps.music09.concept.libraries.ghupdater;
 
+import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import dev.hellpie.apps.music09.concept.libraries.ghupdater.internal.AssetModel;
 import dev.hellpie.apps.music09.concept.libraries.ghupdater.internal.ReleaseResponse;
@@ -34,21 +36,42 @@ public final class GHUpdaterUtils {
 	}
 
 	@Nullable
-	public GHUpdateInfo getLatestVersion() throws IOException, NullPointerException, IllegalArgumentException {
-		if(!GHUtils.isValidRepo(config.getUserName(), config.getRepoName())) return null;
+	public GHUpdateInfo getLatestVersion() throws ExecutionException, InterruptedException {
+		return new AsyncTask<Void, Void, GHUpdateInfo>() {
 
-		List<ReleaseResponse> releases = GHUtils.getReleases(config.getUserName(), config.getRepoName());
-		if(releases.isEmpty()) return null;
+			@Override
+			protected GHUpdateInfo doInBackground(Void... params) {
+				try {
+					if(!GHUtils.isValidRepo(config.getUserName(), config.getRepoName())) return null;
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
 
-		ReleaseResponse latest = null;
-		for(ReleaseResponse release : releases) {
-			if(!isValidRelease(release) || (latest != null && release.publishedAt.after(latest.publishedAt))) continue;
+				List<ReleaseResponse> releases;
+				try {
+					releases = GHUtils.getReleases(config.getUserName(), config.getRepoName());
 
-			for(AssetModel asset : release.assets) if(isValidAsset(asset)) return GHUpdateInfo.Builder.fromData(release, asset);
-			latest = release;
-		}
+					if(releases.isEmpty()) return null;
 
-		return null;
+					ReleaseResponse latest = null;
+					for(ReleaseResponse release : releases) {
+						if(!isValidRelease(release) || (latest != null && release.publishedAt.after(latest.publishedAt)))
+							continue;
+
+						for(AssetModel asset : release.assets)
+							if(isValidAsset(asset))
+								return GHUpdateInfo.Builder.fromData(release, asset);
+						latest = release;
+					}
+
+					return null;
+				} catch(IOException e) {
+					e.printStackTrace();
+				}
+
+				return null;
+			}
+		}.execute().get();
 	}
 
 	private boolean isValidRelease(ReleaseResponse release) {
