@@ -28,13 +28,4 @@
 	<string name="permissions_read_storage">I permessi per leggere la memoria interna del dispositivo sono necessari a questa applicazione per poter leggere la tua musica, mostrarti le copertine dei tuoi album e riprodurre le tue tracce preferite.\nPer favore, garantisci accesso ai permessi richiesti, ti promettiamo che l\'applicazione non li usa (e mai li userà) per altri scopi oltre alla riproduzione musicale.</string>
 	<string name="permissions_accept_button">Garantisci</string>
 	<string name="permissions_cancel_button">Esci</string>
-
-	<!--~~~~~~~~~~ GHUpdater Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-	<string name="update_available_snack_message">Una nuova versione è disponibile!</string>
-	<string name="update_available_snack_action">Installa</string>
-	<string name="update_available_dialog_title">Aggiornamento per Music #09: %s</string>
-	<string name="update_available_dialog_install">Installa</string>
-	<string name="update_available_dialog_wait">Scaricando…</string>
-	<string name="update_available_notif_changelog">Novità</string>
-	<string name="update_available_notif_install">Installa</string>
 </resources>

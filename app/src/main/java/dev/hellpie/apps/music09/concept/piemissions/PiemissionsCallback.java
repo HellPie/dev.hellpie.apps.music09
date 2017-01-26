@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.hellpie.apps.music09.concept.libraries.piemissions;
+package dev.hellpie.apps.music09.concept.piemissions;
 
 import java.util.HashMap;
 

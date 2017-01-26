@@ -33,13 +33,4 @@
 	<string name="permissions_read_storage">The permission to read your files is needed by this app to load your music, your album arts and play your favorite tracks.\nPlease grant access to this permission, we promise you this app does not (and will never) use it for anything else.</string>
 	<string name="permissions_accept_button">Grant</string>
 	<string name="permissions_cancel_button">Quit</string>
-
-	<!--~~~~~~~~~~ GHUpdater Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-	<string name="update_available_snack_message">A new app version is available!</string>
-	<string name="update_available_snack_action">Install</string>
-	<string name="update_available_dialog_title">Music #09 Update: %s</string>
-	<string name="update_available_dialog_wait">Downloading…</string>
-	<string name="update_available_dialog_install">Install</string>
-	<string name="update_available_notif_changelog">See Changes</string>
-	<string name="update_available_notif_install">Install</string>
 </resources>

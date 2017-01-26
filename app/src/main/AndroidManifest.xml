@@ -15,6 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~  limitations under the License.
   -->
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 		  xmlns:tools="http://schemas.android.com/tools"
 		  package="dev.hellpie.apps.music09.concept">
@@ -22,9 +23,6 @@
 	<!-- To play music when the screen is off, prevents Deep Sleep from knocking us down -->
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-	<!-- To check and download updates automatically -->
-	<uses-permission android:name="android.permission.INTERNET" />
 
 	<application
 			android:allowBackup="true"
@@ -48,12 +46,13 @@
 				android:name=".ui.activities.SplashActivity"
 				android:screenOrientation="userPortrait"
 				android:theme="@style/SplashScreen">
+
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
-
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+
 		<activity
 				android:name=".ui.activities.PlayerActivity"
 				android:screenOrientation="userPortrait">
@@ -81,16 +80,6 @@
 				<action android:name="dev.hellpie.apps.music09.ACTION_GO_BACK" />
 			</intent-filter>
 		</service>
-
-		<receiver
-				android:name=".services.UpdateReadyReceiver"
-				android:enabled="true"
-				android:exported="false">
-			<intent-filter>
-				<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
-				<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
-			</intent-filter>
-		</receiver>
 	</application>
 
 </manifest>

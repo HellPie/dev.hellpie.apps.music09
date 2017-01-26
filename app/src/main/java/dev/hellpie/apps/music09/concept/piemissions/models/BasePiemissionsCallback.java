@@ -14,11 +14,11 @@
  *  limitations under the License.
  */
 
-package dev.hellpie.apps.music09.concept.libraries.piemissions.models;
+package dev.hellpie.apps.music09.concept.piemissions.models;
 
 import java.util.HashMap;
 
-import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionsCallback;
+import dev.hellpie.apps.music09.concept.piemissions.PiemissionsCallback;
 
 /**
  * Provides a blank implementation of PiemissionsCallback
