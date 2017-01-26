@@ -14,7 +14,7 @@
  *  limitations under the License.
  */
 
-package dev.hellpie.apps.music09.concept.piemissions;
+package dev.hellpie.apps.music09.concept.libraries.piemissions;
 
 import android.support.annotation.NonNull;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import dev.hellpie.apps.music09.concept.piemissions.models.BasePiemissionsCallback;
+import dev.hellpie.apps.music09.concept.libraries.piemissions.models.BasePiemissionsCallback;
 
 public final class PiemissionRequest {
 

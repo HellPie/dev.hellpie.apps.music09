@@ -14,39 +14,14 @@
 #  limitations under the License.
 #
 
-#--------------- Generic Proguard rules for Google Guava ------------------------------------------#
--keep class com.google.common.io.Resources {
-    public static <methods>;
-}
-
--keep class com.google.common.collect.Lists {
-    public static ** reverse(**);
-}
-
--keep class com.google.common.base.Charsets {
-    public static <fields>;
-}
-
--keep class com.google.common.base.Joiner {
-    public static com.google.common.base.Joiner on(java.lang.String);
-    public ** join(...);
-}
-
--keep class com.google.common.collect.MapMakerInternalMap$ReferenceEntry
--keep class com.google.common.cache.LocalCache$ReferenceEntry
-
-# http://stackoverflow.com/questions/9120338/proguard-configuration-for-guava-with-obfuscation-and-optimization
--dontwarn javax.annotation.**
--dontwarn javax.inject.**
--dontwarn sun.misc.Unsafe
-
-#--------------- Proguard rules for Google Guava 19.0 ---------------------------------------------#
--dontwarn java.lang.ClassValue
--dontwarn com.google.j2objc.annotations.Weak
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
-
-#--------------- Proguard rules for Google Guava 20.0 ---------------------------------------------#
--dontwarn com.google.common.collect.MinMaxPriorityQueue
--keepclasseswithmembers public class * {
-    public static void main(java.lang.String[]);
-}
+#--------------- Proguard rules for SquareUp Retrofit 2 -------------------------------------------#
+# Platform calls Class.forName on types which do not exist on Android to determine platform.
+-dontnote retrofit2.Platform
+# Platform used when running on RoboVM on iOS. Will not be used at runtime.
+-dontnote retrofit2.Platform$IOS$MainThreadExecutor
+# Platform used when running on Java 8 VMs. Will not be used at runtime.
+-dontwarn retrofit2.Platform$Java8
+# Retain generic type information for use by reflection by converters and adapters.
+-keepattributes Signature
+# Retain declared checked exceptions for use by a Proxy instance.
+-keepattributes Exceptions

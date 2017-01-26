@@ -27,9 +27,9 @@ import android.support.annotation.NonNull;
 import java.util.HashMap;
 
 import dev.hellpie.apps.music09.concept.R;
-import dev.hellpie.apps.music09.concept.piemissions.PiemissionRequest;
-import dev.hellpie.apps.music09.concept.piemissions.PiemissionsCallback;
-import dev.hellpie.apps.music09.concept.piemissions.PiemissionsUtils;
+import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionRequest;
+import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionsCallback;
+import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionsUtils;
 
 public class SplashActivity extends Activity {
 	public static final int PERMISSIONS_CODE = 9001;
