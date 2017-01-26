@@ -29,13 +29,4 @@
 		<item name="android:navigationBarColor">?android:attr/colorBackground</item>
 		<item name="android:windowBackground">@drawable/layerlist_splash_screen</item>
 	</style>
-
-	<style name="_DebugTheme" parent="Theme.AppCompat.Light">
-		<item name="colorPrimary">@color/colorPrimary</item>
-		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-		<item name="colorAccent">@color/colorAccent</item>
-
-		<item name="android:shadowColor">@color/shadowColor</item>
-		<item name="android:windowBackground">@color/windowBackground</item>
-	</style>
 </resources>
