@@ -27,9 +27,9 @@ import android.support.annotation.NonNull;
 import java.util.HashMap;
 
 import dev.hellpie.apps.music09.concept.R;
-import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionRequest;
-import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionsCallback;
-import dev.hellpie.apps.music09.concept.libraries.piemissions.PiemissionsUtils;
+import dev.hellpie.libs.piemissions.PiemissionsCallback;
+import dev.hellpie.libs.piemissions.PiemissionsRequest;
+import dev.hellpie.libs.piemissions.PiemissionsUtils;
 
 public class SplashActivity extends Activity {
 	public static final int PERMISSIONS_CODE = 9001;
@@ -55,7 +55,7 @@ public class SplashActivity extends Activity {
 		PiemissionsUtils.init(this);
 
 		// Create a request
-		final PiemissionRequest request = new PiemissionRequest(PERMISSIONS_CODE, Manifest.permission.READ_EXTERNAL_STORAGE);
+		final PiemissionsRequest request = new PiemissionsRequest(PERMISSIONS_CODE, Manifest.permission.READ_EXTERNAL_STORAGE);
 		request.setCallback(new PiemissionsCallback() {
 			@Override
 			public void onGranted() {
