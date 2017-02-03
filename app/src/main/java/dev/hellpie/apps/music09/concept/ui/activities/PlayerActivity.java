@@ -146,7 +146,7 @@ public class PlayerActivity extends AppCompatActivity
 					e.printStackTrace();
 				}
 
-				if(updateInfo != null) new UpdaterUtils(PlayerActivity.this).download(updateInfo);
+				if(updateInfo != null) UpdaterUtils.download(updateInfo, PlayerActivity.this);
 			}
 		}).start();
 
@@ -154,8 +154,7 @@ public class PlayerActivity extends AppCompatActivity
 		setSupportActionBar(toolbar);
 		toolbar.setNavigationOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View view) {
-
+			public void onClick(View v) {
 				// Show a DialogFragment and load it with the list of all the albums
 				MusicChooserFragment.newInstance(MusicChooserFragment.LIST_ALBUMS, PlayerActivity.this)
 						.show(PlayerActivity.this.getSupportFragmentManager(), MUSIC_FRAGMENT);
@@ -515,12 +514,7 @@ public class PlayerActivity extends AppCompatActivity
 				// Knowing we can't extract a color from a real album art, set a fixed one
 				// This is the color used in the fallback album art, we won't extract it via Palette
 				// because it's much faster to set it directly, since we know it.
-				int color = -1;
-				if(albumArtBitmap == null) {
-					color = updateColors(GraphicUtils.BLUE_GREY_500);
-				} else {
-					color = updateColors(); // EASY: the others will do the dirty job for us (even tho I wrote the code for it...)
-				}
+				int color = (albumArtBitmap == null ? updateColors(GraphicUtils.BLUE_GREY_500) : updateColors());
 
 				String title = song.getTitle();
 				PlayerActivity.this.setTaskDescription(new ActivityManager.TaskDescription(
@@ -537,15 +531,10 @@ public class PlayerActivity extends AppCompatActivity
 	}
 
 	private int updateColors() {
-		int fallbackColor;
-		if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-			fallbackColor = getResources().getColor(R.color.colorAccent, getTheme());
-		} else {
-			//noinspection deprecation
-			fallbackColor = getResources().getColor(R.color.colorAccent);
-		}
-
-		return updateColors(GraphicUtils.extractVibrantColor(albumArtSquareView.getDrawable(), fallbackColor));
+		return updateColors(GraphicUtils.extractVibrantColor(
+				albumArtSquareView.getDrawable(),
+				ContextCompat.getColor(this, R.color.colorAccent)
+		));
 	}
 
 	private int updateColors(int color) {

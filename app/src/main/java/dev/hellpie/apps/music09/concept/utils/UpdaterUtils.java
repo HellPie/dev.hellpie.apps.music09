@@ -18,12 +18,10 @@ package dev.hellpie.apps.music09.concept.utils;
 
 
 import android.app.DownloadManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import java.lang.ref.WeakReference;
 import java.util.Date;
 
 import dev.hellpie.apps.music09.concept.BuildConfig;
@@ -48,16 +46,9 @@ public class UpdaterUtils {
 			})
 			.build();
 
-	private WeakReference<Context> appContextRef;
-	public BroadcastReceiver updateReceiver;
+	private UpdaterUtils() { /* Utils - Never instantiate */ }
 
-	public UpdaterUtils(@NonNull Context context) {
-		appContextRef = new WeakReference<>(context);
-	}
-
-	public void download(@NonNull GHUpdateInfo info) {
-		Context context = appContextRef.get();
-		if(context == null) return;
+	public static void download(@NonNull GHUpdateInfo info, @NonNull Context context) {
 
 		String downloadUrl = info.getDownloadURI().toString();
 
