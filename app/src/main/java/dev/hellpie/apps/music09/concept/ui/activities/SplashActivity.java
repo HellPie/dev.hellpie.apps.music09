@@ -79,7 +79,6 @@ public class SplashActivity extends Activity {
 								@Override
 								public void onClick(DialogInterface dialogInterface, int i) {
 									dialogInterface.dismiss();
-									SplashActivity.this.finish();
 									SplashActivity.this.finishAffinity();
 								}
 							})
