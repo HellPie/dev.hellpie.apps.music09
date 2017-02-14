@@ -38,7 +38,6 @@ android {
 			minifyEnabled true
 			shrinkResources true
 			proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
 		}
 	}
 
@@ -47,23 +46,21 @@ android {
 //		sourceCompatibility 1.8
 //	}
 
-	// Avoid warning for "Not all execution paths return a value" in Android Studio Canary builds
+	// Avoid warning for "Not all execution paths return a value" in Android Studio
 	return true
 }
 
 dependencies {
 	compile fileTree(include: ['*.jar'], dir: 'libs')
 
-	compile 'com.android.support:support-annotations:25.1.0'
+	compile 'com.android.support:support-annotations:25.1.1'
 
-	compile 'com.android.support:appcompat-v7:25.1.0'
+	compile 'com.android.support:appcompat-v7:25.1.1'
 
-	compile 'com.android.support:recyclerview-v7:25.1.0'
-	compile 'com.android.support:design:25.1.0'
+	compile 'com.android.support:recyclerview-v7:25.1.1'
+	compile 'com.android.support:design:25.1.1'
 
-	compile 'com.android.support:palette-v7:25.1.0'
-
-	//compile 'com.google.guava:guava:20.0'
+	compile 'com.android.support:palette-v7:25.1.1'
 
 	// ButterKnife (Easy View Binding via Annotations)
 	compile 'com.jakewharton:butterknife:8.4.0'
