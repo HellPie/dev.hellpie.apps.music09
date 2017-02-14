@@ -18,11 +18,89 @@
 <resources>
 	<!--~~~~~~~~~~ Music Chooser Custom Items ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="all_songs">Riproduzione Casuale</string>
+
 	<!--~~~~~~~~~~ Accessibility Descriptions ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="description_toggle_play_pause">Ferma/riprendi riproduzione</string>
 	<string name="description_previous_song">Canzone precedente</string>
 	<string name="description_next_song">Canzone successiva</string>
 	<string name="description_album_art">Copertina dell\'album</string>
+
+	<!--~~~~~~~~~~ Preferences and Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="activity_settings_name">Preferenze di Music #09</string>
+
+	<string name="preferences_warning_summary"><b>Nessuna delle seguenti impostazioni è attualmente implementata. Le modifiche delle seguenti impostazioni quindi non modificheranno in alcun modo l\'attuale funzionamento dell\'applicazione.</b></string>
+
+	<string name="preferences_update_title">Aggiornamenti</string>
+	<string name="preferences_update_summary">Personalizza gli aggiornamenti automatci e il loro download.</string>
+
+	<string name="preferences_update_enable_title">Aggiorna automaticamente</string>
+	<string name="preferences_update_enable_summaryEnabled">Gli aggiornamenti saranno scaricati automaticamente.</string>
+	<string name="preferences_update_enable_summaryDisabled">Gli aggiornamenti non saranno mai scaricati.</string>
+
+	<string name="preferences_update_betas_title">Scarica aggiornamenti in beta</string>
+	<string name="preferences_update_betas_summaryEnabled">Gli aggiornamenti in beta verrano scaricati.</string>
+	<string name="preferences_update_betas_summaryDisabled">Solo aggiornamenti stabili verranno scaricati.</string>
+
+	<string name="preferences_update_alphas_title">Scarica aggiornamenti in alpha</string>
+	<string name="preferences_update_alphas_summaryEnabled">Tutti i tipi di aggiornamento verranno scaricati.</string>
+	<string name="preferences_update_alphas_summaryDisabled">Gli aggiornamenti in alha non verranno scaricati.</string>
+
+	<string name="preferences_update_timer_title">Frequenza per il controllo aggiornamenti</string>
+	<string name="preferences_update_timer_summaryDefault">Controlla solo quando si apre l\'applicazione.</string>
+	<string name="preferences_update_timer_dialogTitle">Controlla gli aggiornamenti:</string>
+	<string-array name="preferences_update_timer_entries">
+		<item>All\'apertura</item>
+		<item>Settimanalmente</item>
+		<item>Mensilmente</item>
+	</string-array>
+	<string-array name="preferences_update_timer_summaryValues">
+		<item translatable="false">@string/preferences_update_timer_summaryDefault</item>
+		<item>Controlla all\'apertura dell\'applicazione settimanalmente.</item>
+		<item>Controlla all\'apertura dell\'applicazione mensilmente.</item>
+	</string-array>
+
+	<string name="preferences_playback_title">Riproduzione</string>
+	<string name="preferences_playback_summary">Personalizza la riproduzione musicale e il riconoscimento delle cuffie.</string>
+
+	<string name="preferences_playback_resume_title">Riproduci subito</string>
+	<string name="preferences_playback_resume_summaryEnabled">Riproduci musica appena l\'applicazione si apre.</string>
+	<string name="preferences_playback_resume_summaryDisabled">Non riprodurre mai musica all\'apertura dell\'applicazione.</string>
+
+	<string name="preferences_playback_resume_headset_title">Restringi la riproduzione automatica</string>
+	<string name="preferences_playback_resume_headset_summaryEnabled">Riproduci musica automaticamente solo se all\'apertura dell\'applicazione è inserito un jack per le cuffie.</string>
+	<string name="preferences_playback_resume_headset_summaryDisabled">Riproduci sempre musica automaticamente all\'apertura dell\'applicazione.</string>
+
+	<string name="preferences_playback_headset_title">Non fermare mai lariproduzione</string>
+	<string name="preferences_playback_headset_summaryEnabled">Continua a riprodurre musica anche se il jack audio viene rimosso.</string>
+	<string name="preferences_playback_headset_summaryDisabled">Ferma la riproduzione se il jack audio viene rimosso.</string>
+
+	<string name="preferences_debug_title">Debug</string>
+	<string name="preferences_debug_summary">Personalizza il debug e come vengono segnalati gli errori.</string>
+
+	<string name="preferences_debug_enable_title">Abilita modalità di debug avanzata</string>
+	<string name="preferences_debug_enable_summaryEnabled">Mostra altre opzioni per configurare il logging e gli strumenti di debug, questo potrebbe rallentare l\'applicazione, ma aiuta a correggere bug e a segnalare crash con maggiori dettagli.</string>
+	<string name="preferences_debug_enable_summaryDisabled">Non avviare mai l\'applicazione in modalità di debug.</string>
+
+	<string name="preferences_debug_tuner_title">Regola gli strumenti di debug</string>
+	<string name="preferences_debug_tuner_summary">Regola con precisione i log e il raccoglimento dati quando l\'applicazione smette di funzionare e altre opzioni…</string>
+
+	<string name="preferences_debug_logcat_title">Abilità i log dettagliati</string>
+	<string name="preferences_debug_logcat_summaryEnabled">Scrivi più informazioni in LogCat per trovare bug più rapidamente.</string>
+	<string name="preferences_debug_logcat_summaryDisabled">Scrivi solo le informazioni necessarie in LogCat.</string>
+
+	<string name="preferences_debug_stacktrace_title">Salva le segnalazioni d\'errore in memoria locale</string>
+	<string name="preferences_debug_stacktrace_summaryEnabled">Salva le informazioni d\'errore e la relativa Stacktrace quando l\'applicazione smette di funzionare inaspettatamente.</string>
+	<string name="preferences_debug_stacktrace_summaryDisabled">Non salvare le informazioni critiche quando l\'applicazione smette di funzionare.</string>
+
+	<string name="preferences_debug_upload_title">Invia segnalazioni di bug automaticamente</string>
+	<string name="preferences_debug_upload_summaryEnabled">Carica e invia una segnalazione di bug appena l\'applicazione smette di funzionare inaspettatamente <i>(l\'upload verrà eseguito solo via connessione WiFi)</i>.</string>
+	<string name="preferences_debug_upload_summaryDisabled">Lascia che sia l\'utente a documentare e inviare manualmente le segnalazioni d\'errore.</string>
+	<string name="preferences_debug_upload_warning">Questa applicazione non utilizza alcuna libreria di terze parti per documentare errori o per il logging.\nLe segnalazioni d\'errore sono inviate direttamente allo sviluppatore tramite \"GitHub Issues\".\n<b>Dati personali non verrano mai registrati</b> o inviati da alcuna parte.</string>
+
+	<string name="preferences_debug_analytics_title">Invia informazioni d\'analisi anonime</string>
+	<string name="preferences_debug_analytics_summaryEnabled">Invia informazioni anonime relative all\'utilizzo dell\'applicazione per migliorare l\'esperienza utente <i>(l\'upload verrà eseguito solo tramite connessione WiFi)</i>.</string>
+	<string name="preferences_debug_analytics_summaryDisabled">Non contribuire al miglioramento dell\'esperienza utente dell\'applicazione.</string>
+	<string name="preferences_debug_analytics_warning">Questa applicazione non utilizza alcuna libreria di terze parti per il collezionamento di dati sull\'utilizzo.\nI dati anonimi e crittografati verranno inviati direttamente allo sviluppatore.\n<b>Dati personali non saranno mai registrati</b> o inviati da alcuna parte.</string>
 
 	<!--~~~~~~~~~~ Permissions Utils Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="permissions_read_storage">I permessi per leggere la memoria interna del dispositivo sono necessari a questa applicazione per poter leggere la tua musica, mostrarti le copertine dei tuoi album e riprodurre le tue tracce preferite.\nPer favore, garantisci accesso ai permessi richiesti, ti promettiamo che l\'applicazione non li usa (e mai li userà) per altri scopi oltre alla riproduzione musicale.</string>

@@ -29,6 +29,103 @@
 	<string name="description_next_song">Next Song</string>
 	<string name="description_album_art">Album Art</string>
 
+	<!--~~~~~~~~~~ Preferences and Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="activity_settings_name">Music #09 Settings</string>
+
+	<string name="preferences_warning_summary"><b>All the settings are currently unimplemented and therefore will not change the behavior of the application.</b></string>
+
+	<string name="preferences_update_title">Updates</string>
+	<string name="preferences_update_summary">Manage settings for the automatic update downloader.</string>
+
+	<string name="preferences_update_enable_key" translatable="false">preferences_update_enable</string>
+	<string name="preferences_update_enable_title">Self-download updates</string>
+	<string name="preferences_update_enable_summaryEnabled">Updates will be automatically downloaded.</string>
+	<string name="preferences_update_enable_summaryDisabled">Updates will never be downloaded.</string>
+
+	<string name="preferences_update_betas_key" translatable="false">preferences_update_betas</string>
+	<string name="preferences_update_betas_title">Self-download beta updates</string>
+	<string name="preferences_update_betas_summaryEnabled">Beta updates will be downloaded.</string>
+	<string name="preferences_update_betas_summaryDisabled">Only stable updates will be downloaded.</string>
+
+	<string name="preferences_update_alphas_key" translatable="false">preferences_update_alphas</string>
+	<string name="preferences_update_alphas_title">Self-download alpha updates</string>
+	<string name="preferences_update_alphas_summaryEnabled">All updates will be downloaded.</string>
+	<string name="preferences_update_alphas_summaryDisabled">Alpha updates will not be downloaded.</string>
+
+	<string name="preferences_update_timer_key" translatable="false">preferences_update_timer</string>
+	<string name="preferences_update_timer_last_key" translatable="false">preferences_update_timer_last</string>
+	<string name="preferences_update_timer_title">Updates check frequency</string>
+	<string name="preferences_update_timer_summaryDefault">Only check when the app first opens.</string>
+	<string name="preferences_update_timer_dialogTitle">Check for updates:</string>
+	<string-array name="preferences_update_timer_entries">
+		<item>On open</item>
+		<item>Weekly</item>
+		<item>Monthly</item>
+	</string-array>
+	<string-array name="preferences_update_timer_summaryValues">
+		<item translatable="false">@string/preferences_update_timer_summaryDefault</item>
+		<item>Check when the app opens weekly.</item>
+		<item>Check when the app opens monthly.</item>
+	</string-array>
+	<string-array name="preferences_update_timer_entryValues">
+		<item translatable="false">0</item>
+		<item translatable="false">1</item>
+		<item translatable="false">2</item>
+	</string-array>
+
+	<string name="preferences_playback_title">Playback</string>
+	<string name="preferences_playback_summary">Manage settings for music playback and headset detection.</string>
+
+	<string name="preferences_playback_resume_key" translatable="false">preferences_playback_resume</string>
+	<string name="preferences_playback_resume_title">Instant playback</string>
+	<string name="preferences_playback_resume_summaryEnabled">Play music when the app opens.</string>
+	<string name="preferences_playback_resume_summaryDisabled">Never play music instantly when the app opens.</string>
+
+	<string name="preferences_playback_resume_headset_key" translatable="false">preferences_playback_resume_headset</string>
+	<string name="preferences_playback_resume_headset_title">Restrict instant playback</string>
+	<string name="preferences_playback_resume_headset_summaryEnabled">Play music when the app opens only if an audio jack is inserted.</string>
+	<string name="preferences_playback_resume_headset_summaryDisabled">Always play music when the app opens.</string>
+
+	<string name="preferences_playback_headset_key" translatable="false">preferences_playback_headset</string>
+	<string name="preferences_playback_headset_title">Never stop playback</string>
+	<string name="preferences_playback_headset_summaryEnabled">Keep playing music even if jack is removed.</string>
+	<string name="preferences_playback_headset_summaryDisabled">Pause music when jack is removed.</string>
+
+	<string name="preferences_debug_key" translatable="false">preferences_debug</string>
+	<string name="preferences_debug_title">Debug</string>
+	<string name="preferences_debug_summary">Manage debugging tools for testing or reporting bugs.</string>
+
+	<string name="preferences_debug_enable_key" translatable="false">preferences_debug_enable</string>
+	<string name="preferences_debug_enable_title">Enable advanced debug mode</string>
+	<string name="preferences_debug_enable_summaryEnabled">Show extra options to configure logging and debug tools, which might slow down the app, but help to fix bugs quicker and report crashes with more details.</string>
+	<string name="preferences_debug_enable_summaryDisabled">Do not run the app in debug mode.</string>
+
+	<string name="preferences_debug_tuner_key" translatable="false">preferences_debug_tuner</string>
+	<string name="preferences_debug_tuner_title">Tune debug settings</string>
+	<string name="preferences_debug_tuner_summary">Fine tune logcat output, data collection when the app crashes and other options…</string>
+
+	<string name="preferences_debug_logcat_key" translatable="false">preferences_debug_logcat</string>
+	<string name="preferences_debug_logcat_title">Enable verbose logcat output</string>
+	<string name="preferences_debug_logcat_summaryEnabled">Output more information into LogCat to help find bugs quicker.</string>
+	<string name="preferences_debug_logcat_summaryDisabled">Only output critical information to LogCat.</string>
+
+	<string name="preferences_debug_stacktrace_key" translatable="false">preferences_debug_stacktrace</string>
+	<string name="preferences_debug_stacktrace_title">Store crash reports on local storage</string>
+	<string name="preferences_debug_stacktrace_summaryEnabled">Store crash information and the relative Stacktrace locally when the app stops unexpectedly.</string>
+	<string name="preferences_debug_stacktrace_summaryDisabled">Do not store critical information when the app stops working.</string>
+
+	<string name="preferences_debug_upload_key" translatable="false">preferences_debug_upload</string>
+	<string name="preferences_debug_upload_title">Send bug reports automatically</string>
+	<string name="preferences_debug_upload_summaryEnabled">Upload a crash report as soon as the application stops unexpectedly <i>(upload will happen only on a WiFi connection)</i>.</string>
+	<string name="preferences_debug_upload_summaryDisabled">Let the user manually document and upload crash reports.</string>
+	<string name="preferences_debug_upload_warning">This app uses no 3rd party logging/crash-registering library.\nCrash reports are sent directly to the developer through \"GitHub Issues\".\n<b>Personal data will never be recorded</b> or sent anywhere.</string>
+
+	<string name="preferences_debug_analytics_key" translatable="false">preferences_debug_analytics</string>
+	<string name="preferences_debug_analytics_title">Send anonymous analytics data</string>
+	<string name="preferences_debug_analytics_summaryEnabled">Send simple app-related statistics to help improve user experience <i>(this will only happen on a WiFi connection)</i>.</string>
+	<string name="preferences_debug_analytics_summaryDisabled">Do not contribute to improving the user experience of the app.</string>
+	<string name="preferences_debug_analytics_warning">This app uses no 3rd party Analytics library.\nEncrypted anonymous Analytics data will only be sent directly to the developer.\n<b>Personal data will never be recorded</b> or sent anywhere.</string>
+
 	<!--~~~~~~~~~~ Permissions Utils Messages ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="permissions_read_storage">The permission to read your files is needed by this app to load your music, your album arts and play your favorite tracks.\nPlease grant access to this permission, we promise you this app does not (and will never) use it for anything else.</string>
 	<string name="permissions_accept_button">Grant</string>
@@ -42,4 +139,5 @@
 	<string name="update_available_dialog_install">Install</string>
 	<string name="update_available_notif_changelog">See Changes</string>
 	<string name="update_available_notif_install">Install</string>
+
 </resources>

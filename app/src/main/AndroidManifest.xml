@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <!--
   ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
@@ -91,6 +90,17 @@
 				<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
 			</intent-filter>
 		</receiver>
+
+		<activity
+				android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+				android:name=".ui.activities.SettingsActivity"
+				android:label="@string/activity_settings_name"
+				android:exported="false"
+				android:noHistory="true">
+			<intent-filter>
+				<action android:name="android.intent.action.APPLICATION_PREFERENCES" />
+			</intent-filter>
+		</activity>
 	</application>
 
 </manifest>
