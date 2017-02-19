@@ -66,8 +66,8 @@ public final class PrefsUtils {
 	}
 
 	public static int getInt(@NonNull Context context, @IntPref int preference) {
-		return PreferenceManager.getDefaultSharedPreferences(context)
-				.getInt(context.getString(preference), 0);
+		return Integer.valueOf(PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(context.getString(preference), "0"));
 	}
 
 	public static long getString(@NonNull Context context, @LongPref int preference) {
