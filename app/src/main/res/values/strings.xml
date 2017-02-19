@@ -32,7 +32,7 @@
 	<!--~~~~~~~~~~ Preferences and Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="activity_settings_name">Music #09 Settings</string>
 
-	<string name="preferences_warning_summary"><b>All the settings are currently unimplemented and therefore will not change the behavior of the application.</b></string>
+	<string name="preferences_warning_summary"><b>Currently only settings regarding self-updating are implemented. Other settings are not working, but they are saved and will start working automatically once the application will support them.</b></string>
 
 	<string name="preferences_update_title">Updates</string>
 	<string name="preferences_update_summary">Manage settings for the automatic update downloader.</string>

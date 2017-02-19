@@ -24,27 +24,13 @@ import android.support.annotation.NonNull;
 
 import java.util.Date;
 
-import dev.hellpie.apps.music09.concept.BuildConfig;
 import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHConfig;
 import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdateInfo;
 
 public class UpdaterUtils {
 
-	public static final GHConfig UPDATER_CONFIG = new GHConfig.Builder("HellPie", "dev.hellpie.apps.music09")
-			.acceptPrereleases(BuildConfig.VERSION_NAME.toLowerCase().contains("beta"))
-			.withMinimumDate(new Date(1485451800000L)) // 26-Jan-2017 18:30:00 UTC+01:00
-			.withMIMETypeFilter(new GHConfig.MIMETypeFilter() {
-				@Override
-				public boolean isValidFileName(String fileName) {
-					return fileName.endsWith(".apk");
-				}
-
-				@Override
-				public boolean isValidMIMEType(String mimeType) {
-					return mimeType.equals("application/vnd.android.package-archive");
-				}
-			})
-			.build();
+	private static final GHConfig.Builder CONFIG = new GHConfig.Builder("HellPie", "dev.hellpie.apps.music09")
+			.withMinimumDate(new Date(1486412700000L)); // 06-Feb-2017 21:25:00 UTC+01:00
 
 	private UpdaterUtils() { /* Utils - Never instantiate */ }
 
@@ -64,5 +50,27 @@ public class UpdaterUtils {
 				.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
 
 		downloadManager.enqueue(request);
+	}
+
+	public static GHConfig getConfig(@NonNull final Context ctx) {
+		return CONFIG.acceptPrereleases(PrefsUtils.getBool(ctx, PrefsUtils.PREF_UPDATE_ENA_BETA))
+				.withMIMETypeFilter(new GHConfig.MIMETypeFilter() {
+					@Override
+					public boolean isValidFileName(String fileName) {
+						String lower = fileName.toLowerCase();
+						boolean beta = PrefsUtils.getBool(ctx, PrefsUtils.PREF_UPDATE_ENA_BETA);
+						boolean alpha = beta && PrefsUtils.getBool(ctx, PrefsUtils.PREF_UPDATE_ENA_ALPHA);
+
+						// Adjust the config to only consider valid update channels
+						return ((beta && lower.contains("beta")) || (alpha && lower.contains("alpha")))
+								&& lower.endsWith(".apk");
+					}
+
+					@Override
+					public boolean isValidMIMEType(String mimeType) {
+						return mimeType.equals("application/vnd.android.package-archive");
+					}
+				})
+				.build();
 	}
 }

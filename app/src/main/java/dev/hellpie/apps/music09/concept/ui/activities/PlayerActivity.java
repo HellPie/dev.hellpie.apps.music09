@@ -20,6 +20,7 @@ import android.animation.Animator;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -77,6 +78,7 @@ import dev.hellpie.apps.music09.concept.services.UpdateReadyReceiver;
 import dev.hellpie.apps.music09.concept.ui.resources.AnimatedPlayPauseDrawable;
 import dev.hellpie.apps.music09.concept.ui.views.SquareView;
 import dev.hellpie.apps.music09.concept.utils.GraphicUtils;
+import dev.hellpie.apps.music09.concept.utils.PrefsUtils;
 import dev.hellpie.apps.music09.concept.utils.UIUtils;
 import dev.hellpie.apps.music09.concept.utils.UpdaterUtils;
 
@@ -137,18 +139,7 @@ public class PlayerActivity extends AppCompatActivity
 		ButterKnife.bind(this);
 
 		// While the UI is loading, try to see if we got updates
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					updateInfo = new GHUpdaterUtils(UpdaterUtils.UPDATER_CONFIG).getLatestVersion();
-				} catch(InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-				}
-
-				if(updateInfo != null) UpdaterUtils.download(updateInfo, PlayerActivity.this);
-			}
-		}).start();
+		checkForUpdates();
 
 		// AppCompat ActionBar as Activity's Toolbar
 		setSupportActionBar(toolbar);
@@ -621,14 +612,14 @@ public class PlayerActivity extends AppCompatActivity
 			public void run() {
 
 				final boolean ready = uri != null;
+				int text = ready ? R.string.update_available_dialog_install : R.string.update_available_dialog_wait;
 
 				// Update the dialog if we are already showing one
 				if(updateDialog != null) {
 					Button installButton = updateDialog.getButton(AlertDialog.BUTTON_POSITIVE);
 					if(installButton != null) {
 						installButton.setEnabled(ready);
-						installButton.setText(
-								ready ? R.string.update_available_dialog_install : R.string.update_available_dialog_wait);
+						installButton.setText(text);
 						return;
 					} else {
 						updateDialog.cancel();
@@ -640,7 +631,7 @@ public class PlayerActivity extends AppCompatActivity
 						.setTitle(String.format(getString(R.string.update_available_dialog_title), name))
 						.setMessage(changelog)
 						.setPositiveButton(
-								(ready ? R.string.update_available_dialog_install : R.string.update_available_dialog_wait),
+								text,
 								new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
@@ -673,5 +664,40 @@ public class PlayerActivity extends AppCompatActivity
 				if(button != null) button.setEnabled(ready);
 			}
 		});
+	}
+
+	private void checkForUpdates() {
+		final Context ctx = this;
+
+		// Check if the user has enabled updates and how much time has passed since the last check
+		boolean check = PrefsUtils.getBool(ctx, PrefsUtils.PREF_UPDATE_ENA);
+		int timer = PrefsUtils.getInt(ctx, PrefsUtils.PREF_UPDATE_TIMER);
+		long diff = System.currentTimeMillis() - PrefsUtils.getString(ctx, PrefsUtils.PREF_UPDATE_TIMER_LAST);
+		switch(timer) {
+			case 1:
+				check = check && (diff >= 604800000L); // Seconds in a week
+				break;
+			case 2:
+				check = check && (diff >= 2592000000L); // Seconds in 30 days
+				break;
+			default:
+				break;
+		}
+
+		// Only check for updates if the user has enabled them and enough time has passed
+		if(check) {
+			new Thread(new Runnable() {
+				@Override
+				public void run() {
+					try {
+						updateInfo = new GHUpdaterUtils(UpdaterUtils.getConfig(ctx)).getLatestVersion();
+					} catch(InterruptedException | ExecutionException e) {
+						e.printStackTrace();
+					}
+
+					if(updateInfo != null) UpdaterUtils.download(updateInfo, ctx);
+				}
+			}).start();
+		}
 	}
 }

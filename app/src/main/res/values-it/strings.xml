@@ -28,7 +28,7 @@
 	<!--~~~~~~~~~~ Preferences and Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="activity_settings_name">Preferenze di Music #09</string>
 
-	<string name="preferences_warning_summary"><b>Nessuna delle seguenti impostazioni è attualmente implementata. Le modifiche delle seguenti impostazioni quindi non modificheranno in alcun modo l\'attuale funzionamento dell\'applicazione.</b></string>
+	<string name="preferences_warning_summary"><b>Al momento solo le impostazioni per gli aggiornamenti automatici sono implementate. Le altre preferenze non funzionano, ma verranno salvate e applicate automaticamente quando l\'applicazione le supporterà.</b></string>
 
 	<string name="preferences_update_title">Aggiornamenti</string>
 	<string name="preferences_update_summary">Personalizza gli aggiornamenti automatci e il loro download.</string>
