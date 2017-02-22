@@ -53,22 +53,22 @@ android {
 dependencies {
 	compile fileTree(include: ['*.jar'], dir: 'libs')
 
-	compile 'com.android.support:support-annotations:25.1.1'
+	compile 'com.android.support:support-annotations:25.2.0'
 
-	compile 'com.android.support:appcompat-v7:25.1.1'
+	compile 'com.android.support:appcompat-v7:25.2.0'
 
-	compile 'com.android.support:recyclerview-v7:25.1.1'
-	compile 'com.android.support:design:25.1.1'
+	compile 'com.android.support:recyclerview-v7:25.2.0'
+	compile 'com.android.support:design:25.2.0'
 
-	compile 'com.android.support:palette-v7:25.1.1'
+	compile 'com.android.support:palette-v7:25.2.0'
 
 	// ButterKnife (Easy View Binding via Annotations)
 	compile 'com.jakewharton:butterknife:8.4.0'
 	annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
-	// Retrofit 2 (Update checking via GitHub API)
-	compile 'com.squareup.retrofit2:retrofit:2.1.0'
-	compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+	// HellPie (aka me) GitHub Updater (GHUpdater)
+	// https://github.com/HellPie/dev.hellpie.libs.ghupdater
+	compile 'com.github.HellPie:dev.hellpie.libs.ghupdater:1.0.0'
 
 	// HellPie (aka me) Permissions (Piemissions Utils)
 	// https://github.com/HellPie/dev.hellpie.libs.piemissions

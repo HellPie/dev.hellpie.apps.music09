@@ -24,8 +24,8 @@ import android.support.annotation.NonNull;
 
 import java.util.Date;
 
-import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHConfig;
-import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdateInfo;
+import dev.hellpie.libs.ghupdater.GHConfig;
+import dev.hellpie.libs.ghupdater.GHUpdateInfo;
 
 public class UpdaterUtils {
 

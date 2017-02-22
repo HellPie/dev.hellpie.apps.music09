@@ -31,8 +31,8 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 
 import dev.hellpie.apps.music09.concept.R;
-import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdateInfo;
 import dev.hellpie.apps.music09.concept.ui.activities.PlayerActivity;
+import dev.hellpie.libs.ghupdater.GHUpdateInfo;
 
 public class UpdateReadyReceiver extends BroadcastReceiver {
 

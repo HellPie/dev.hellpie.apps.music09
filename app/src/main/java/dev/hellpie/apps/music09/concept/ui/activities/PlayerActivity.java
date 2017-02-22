@@ -65,8 +65,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
 import dev.hellpie.apps.music09.concept.R;
-import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdateInfo;
-import dev.hellpie.apps.music09.concept.libraries.ghupdater.GHUpdaterUtils;
 import dev.hellpie.apps.music09.concept.listeners.MediaPlayerListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
 import dev.hellpie.apps.music09.concept.media.MediaRetriever;
@@ -81,6 +79,8 @@ import dev.hellpie.apps.music09.concept.utils.GraphicUtils;
 import dev.hellpie.apps.music09.concept.utils.PrefsUtils;
 import dev.hellpie.apps.music09.concept.utils.UIUtils;
 import dev.hellpie.apps.music09.concept.utils.UpdaterUtils;
+import dev.hellpie.libs.ghupdater.GHUpdateInfo;
+import dev.hellpie.libs.ghupdater.GHUpdaterUtils;
 
 public class PlayerActivity extends AppCompatActivity
 		implements SeekBar.OnSeekBarChangeListener,
