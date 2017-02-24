@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <!--
   ~ Copyright 2017 Diego Rossi (@_HellPie)
   ~
@@ -32,6 +33,7 @@
 			android:supportsRtl="true"
 			android:theme="@style/AppTheme"
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+
 		<activity
 				android:name=".ui.activities.MainActivity"
 				android:screenOrientation="userPortrait">
@@ -47,12 +49,17 @@
 				android:name=".ui.activities.SplashActivity"
 				android:screenOrientation="userPortrait"
 				android:theme="@style/SplashScreen">
+
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
-
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+
+			<meta-data
+				android:name="android.app.shortcuts"
+				android:resource="@xml/shortcuts" />
 		</activity>
+
 		<activity
 				android:name=".ui.activities.PlayerActivity"
 				android:screenOrientation="userPortrait">
@@ -70,6 +77,7 @@
 				android:name=".services.MusicPlayerService"
 				android:enabled="true"
 				android:exported="false">
+
 			<intent-filter>
 				<action android:name="dev.hellpie.apps.music09.ACTION_PLAY" />
 				<action android:name="dev.hellpie.apps.music09.ACTION_PAUSE" />
@@ -85,6 +93,7 @@
 				android:name=".services.UpdateReadyReceiver"
 				android:enabled="true"
 				android:exported="false">
+
 			<intent-filter>
 				<action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
 				<action android:name="android.intent.action.DOWNLOAD_NOTIFICATION_CLICKED" />
@@ -97,10 +106,10 @@
 				android:label="@string/activity_settings_name"
 				android:exported="false"
 				android:noHistory="true">
+
 			<intent-filter>
 				<action android:name="android.intent.action.APPLICATION_PREFERENCES" />
 			</intent-filter>
 		</activity>
 	</application>
-
 </manifest>

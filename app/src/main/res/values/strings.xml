@@ -29,6 +29,11 @@
 	<string name="description_next_song">Next Song</string>
 	<string name="description_album_art">Album Art</string>
 
+	<!--~~~~~~~~~~ Nougat App Shortcuts ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="shortcut_settings_name_short">Settings</string>
+	<string name="shortcut_settings_name_long">Music #09 Settings</string>
+	<string name="shortcut_settings_name_disabled">Settings are unavailable at the moment</string>
+
 	<!--~~~~~~~~~~ Preferences and Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="activity_settings_name">Music #09 Settings</string>
 

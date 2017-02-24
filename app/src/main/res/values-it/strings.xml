@@ -25,6 +25,11 @@
 	<string name="description_next_song">Canzone successiva</string>
 	<string name="description_album_art">Copertina dell\'album</string>
 
+	<!--~~~~~~~~~~ Nougat App Shortcuts ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+	<string name="shortcut_settings_name_short">Impostazioni</string>
+	<string name="shortcut_settings_name_long">Music #09 - Impostazioni</string>
+	<string name="shortcut_settings_name_disabled">Le impostazioni non sono al momento disponibili</string>
+
 	<!--~~~~~~~~~~ Preferences and Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 	<string name="activity_settings_name">Preferenze di Music #09</string>
 
