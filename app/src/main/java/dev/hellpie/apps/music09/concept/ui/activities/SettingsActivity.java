@@ -18,6 +18,7 @@ package dev.hellpie.apps.music09.concept.ui.activities;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -39,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 
 		// Show a Toolbar/ActionBar on top of the activity with a back arrow instead of an hamburger
 		ActionBar actionBar = getSupportActionBar();
-		if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
+		if(actionBar != null) actionBar.setDisplayHomeAsUpEnabled(!getIntent().getAction().equals(Intent.ACTION_MAIN));
 
 		// Load and display the settings fragment if we're starting clean
 		if(savedInstanceState == null) {
