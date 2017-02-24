@@ -30,7 +30,7 @@ import dev.hellpie.libs.ghupdater.GHUpdateInfo;
 public class UpdaterUtils {
 
 	private static final GHConfig.Builder CONFIG = new GHConfig.Builder("HellPie", "dev.hellpie.apps.music09")
-			.withMinimumDate(new Date(1487505600000L)); // 19-Feb-2017 13:00:00 UTC+01:00
+			.withMinimumDate(new Date(1487928000000L)); // 24-Feb-2017 10:20:00 UTC+01:00
 
 	private UpdaterUtils() { /* Utils - Never instantiate */ }
 
