@@ -28,10 +28,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
-import dev.hellpie.apps.music09.concept.media.models.Playlist;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Playlist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 
 /**
  * Class that manages the music retrieved from the device and other sources, acting as a
@@ -55,43 +55,43 @@ public class MediaLibrary {
 	// See: http://stackoverflow.com/a/31413003
 	// Official Performance video: https://youtu.be/I16lz26WyzQ
 	// Official docs: https://developer.android.com/reference/android/util/SparseArray.html
-	private static LongSparseArray<Song> songs = new LongSparseArray<>();
-	private static LongSparseArray<Album> albums = new LongSparseArray<>();
-	private static LongSparseArray<Artist> artists = new LongSparseArray<>();
-	private static LongSparseArray<Playlist> playlist = new LongSparseArray<>();
+	private static LongSparseArray<Song_DEPRECATED> songs = new LongSparseArray<>();
+	private static LongSparseArray<Album_DEPRECATED> albums = new LongSparseArray<>();
+	private static LongSparseArray<Artist_DEPRECATED> artists = new LongSparseArray<>();
+	private static LongSparseArray<Playlist_DEPRECATED> playlist = new LongSparseArray<>();
 
-	public static void add(@NonNull Song song) {
+	public static void add(@NonNull Song_DEPRECATED song) {
 		add(song, false);
 	}
 
-	public static void add(@NonNull Song song, boolean overwrite) {
+	public static void add(@NonNull Song_DEPRECATED song, boolean overwrite) {
 		if(songs.get(song.getId()) != null && !overwrite) return;
 		synchronized(songsLock) { songs.put(song.getId(), song); }
 	}
 
-	public static void add(@NonNull Album album) {
+	public static void add(@NonNull Album_DEPRECATED album) {
 		add(album, false);
 	}
 
-	public static void add(@NonNull Album album, boolean overwrite) {
+	public static void add(@NonNull Album_DEPRECATED album, boolean overwrite) {
 		if(albums.get(album.getId()) != null && !overwrite) return;
 		synchronized(albumsLock) { albums.put(album.getId(), album); }
 	}
 
-	public static void add(Artist artist) {
+	public static void add(Artist_DEPRECATED artist) {
 		add(artist, false);
 	}
 
-	public static void add(@NonNull Artist artist, boolean overwrite) {
+	public static void add(@NonNull Artist_DEPRECATED artist, boolean overwrite) {
 		if(artists.get(artist.getId()) != null && !overwrite) return;
 		synchronized(artistsLock) { artists.put(artist.getId(), artist); }
 	}
 
-	public static void add(@NonNull Playlist playlist) {
+	public static void add(@NonNull Playlist_DEPRECATED playlist) {
 		add(playlist, false);
 	}
 
-	public static void add(@NonNull Playlist playlist, boolean overwrite) {
+	public static void add(@NonNull Playlist_DEPRECATED playlist, boolean overwrite) {
 		if(MediaLibrary.playlist.get(playlist.getId()) != null && !overwrite) return;
 		synchronized(playlistLock) { MediaLibrary.playlist.put(playlist.getId(), playlist); }
 	}
@@ -101,48 +101,48 @@ public class MediaLibrary {
 	 * @return All the songs in MediaLibrary.
 	 */
 	@NonNull
-	public static List<Song> getSongs() {
+	public static List<Song_DEPRECATED> getSongs() {
 
 		// Clone the array so we are sure that while building the list no async operation will add
 		// a new item in the array
-		LongSparseArray<Song> clone = songs.clone();
+		LongSparseArray<Song_DEPRECATED> clone = songs.clone();
 
 		// Don't waste time on looping if we have nothing to loop on
 		if(clone.size() < 1) return Collections.emptyList();
 
-		List<Song> allSongs = new ArrayList<>(clone.size());
+		List<Song_DEPRECATED> allSongs = new ArrayList<>(clone.size());
 		for(int i = 0; i < clone.size(); i++) allSongs.add(clone.valueAt(i));
 		return allSongs;
 	}
 
 	/**
 	 * Gathers all the songs matching a specific album in an unordered list.
-	 * @param album The Album songs should be matched to
-	 * @return All the songs in the given Album
+	 * @param album The Album_DEPRECATED songs should be matched to
+	 * @return All the songs in the given Album_DEPRECATED
 	 */
 	@NonNull
-	public static List<Song> getSongs(@NonNull Album album) {
+	public static List<Song_DEPRECATED> getSongs(@NonNull Album_DEPRECATED album) {
 		if(albums.get(album.getId()) == null) return Collections.emptyList();
 
-		LongSparseArray<Song> clone = songs.clone();
+		LongSparseArray<Song_DEPRECATED> clone = songs.clone();
 
-		List<Song> albumSongs = new ArrayList<>();
+		List<Song_DEPRECATED> albumSongs = new ArrayList<>();
 		for(int i = 0; i < clone.size(); i++) {
-			Song song = clone.valueAt(i);
+			Song_DEPRECATED song = clone.valueAt(i);
 			if(song.getAlbumId() == album.getId()) albumSongs.add(song);
 		}
 
 		return albumSongs;
 	}
 
-	public static List<Song> getSongs(@NonNull Artist artist) {
+	public static List<Song_DEPRECATED> getSongs(@NonNull Artist_DEPRECATED artist) {
 		if(artists.get(artist.getId()) == null) return Collections.emptyList();
 
-		LongSparseArray<Song> clone = songs.clone();
+		LongSparseArray<Song_DEPRECATED> clone = songs.clone();
 
-		List<Song> artistSongs = new ArrayList<>();
+		List<Song_DEPRECATED> artistSongs = new ArrayList<>();
 		for(int i = 0; i < clone.size(); i++) {
-			Song song = clone.valueAt(i);
+			Song_DEPRECATED song = clone.valueAt(i);
 			if(song.getArtistId() == artist.getId()) artistSongs.add(song);
 		}
 
@@ -155,7 +155,7 @@ public class MediaLibrary {
 	 * @return A song if the id is found, or null
 	 */
 	@Nullable
-	public static Song getSong(long id) {
+	public static Song_DEPRECATED getSong(long id) {
 		return songs.get(id);
 	}
 
@@ -163,7 +163,7 @@ public class MediaLibrary {
 	 * Returns a random song of the known ones, will return null if no song is present.
 	 * @return A random song or null if no songs are found
 	 */
-	public static Song getRandomSong() {
+	public static Song_DEPRECATED getRandomSong() {
 		if(songs.size() < 1) return null;
 		Random random = new Random(System.currentTimeMillis());
 		return songs.valueAt(random.nextInt(songs.size()));
@@ -173,26 +173,26 @@ public class MediaLibrary {
 	 * Gathers all the known albums and returns them as an unordered list.
 	 * @return All the albums as a list
 	 */
-	public static List<Album> getAlbums() {
-		LongSparseArray<Album> clone = albums.clone();
+	public static List<Album_DEPRECATED> getAlbums() {
+		LongSparseArray<Album_DEPRECATED> clone = albums.clone();
 		if(clone.size() < 1) return Collections.emptyList();
-		List<Album> allAlbums = new ArrayList<>();
+		List<Album_DEPRECATED> allAlbums = new ArrayList<>();
 		for(int i = 0; i < clone.size(); i++) allAlbums.add(clone.valueAt(i));
 		return allAlbums;
 	}
 
-	public static List<Artist> getArtists() {
-		LongSparseArray<Artist> clone = artists.clone();
+	public static List<Artist_DEPRECATED> getArtists() {
+		LongSparseArray<Artist_DEPRECATED> clone = artists.clone();
 		if(clone.size() < 1) return Collections.emptyList();
-		List<Artist> allArtists = new ArrayList<>();
+		List<Artist_DEPRECATED> allArtists = new ArrayList<>();
 		for(int i = 0; i < clone.size(); i++) allArtists.add(clone.valueAt(i));
 		return allArtists;
 	}
 
-	public static List<Album> getAlbums(Artist artist) {
+	public static List<Album_DEPRECATED> getAlbums(Artist_DEPRECATED artist) {
 		if(albums.size() < 1) return Collections.emptyList();
-		List<Album> validAlbums = new ArrayList<>();
-		for(int i = 0; i < albums.size(); i++) { // TODO: Artist.getId() in Album class for MediaLibrary.getAlbums(Artist)
+		List<Album_DEPRECATED> validAlbums = new ArrayList<>();
+		for(int i = 0; i < albums.size(); i++) { // TODO: Artist_DEPRECATED.getId() in Album_DEPRECATED class for MediaLibrary.getAlbums(Artist_DEPRECATED)
 			if(albums.valueAt(i).getArtist().toLowerCase().contains(artist.getName().toLowerCase())) {
 				validAlbums.add(albums.valueAt(i));
 			}
@@ -201,30 +201,30 @@ public class MediaLibrary {
 	}
 
 	/**
-	 * Returns the Album matching a specific album ID or an empty album if no match is found.
+	 * Returns the Album_DEPRECATED matching a specific album ID or an empty album if no match is found.
 	 * @param albumId The album ID to search for
-	 * @return The Album matching albumId or Album.NO_ALBUM if no match is found or albumId == -1
+	 * @return The Album_DEPRECATED matching albumId or Album_DEPRECATED.NO_ALBUM if no match is found or albumId == -1
 	 */
 	@NonNull
-	public static Album getAlbum(long albumId) {
-		Album album = albums.get(albumId);
-		return (album != null ? album : Album.NO_ALBUM);
+	public static Album_DEPRECATED getAlbum(long albumId) {
+		Album_DEPRECATED album = albums.get(albumId);
+		return (album != null ? album : Album_DEPRECATED.NO_ALBUM);
 	}
 
 	/**
 	 * Returns a random album of the ones known, will return null is song is present.
 	 * @return A random album or null if no albums are found
 	 */
-	public static Album getRandomAlbum() {
+	public static Album_DEPRECATED getRandomAlbum() {
 		if(albums.size() < 1) return null;
 		Random random = new Random(System.currentTimeMillis());
 		return albums.valueAt(random.nextInt(albums.size()));
 	}
 
 	@NonNull
-	public static Album getRandomAlbum(Artist artist) {
-		List<Album> albums = getAlbums(artist);
-		if(albums.size() < 1) return Album.NO_ALBUM;
+	public static Album_DEPRECATED getRandomAlbum(Artist_DEPRECATED artist) {
+		List<Album_DEPRECATED> albums = getAlbums(artist);
+		if(albums.size() < 1) return Album_DEPRECATED.NO_ALBUM;
 		return albums.get(new Random(System.currentTimeMillis()).nextInt(albums.size()));
 	}
 
@@ -235,11 +235,11 @@ public class MediaLibrary {
 	 * @param song The song for which to get the artwork
 	 * @return Either a Bitmap containing the album art or null if it cannot be found
 	 */
-	public static Bitmap getAlbumArt(@NonNull Song song) {
+	public static Bitmap getAlbumArt(@NonNull Song_DEPRECATED song) {
 
 		// Try to get the image from the album first
-		Album album = getAlbum(song.getAlbumId());
-		if(album.getId() == Album.NO_ALBUM.getId()) {
+		Album_DEPRECATED album = getAlbum(song.getAlbumId());
+		if(album.getId() == Album_DEPRECATED.NO_ALBUM.getId()) {
 			Bitmap result = getAlbumArt(album);
 			if(result != null) return result;
 		}
@@ -255,11 +255,11 @@ public class MediaLibrary {
 	}
 
 	/**
-	 * Returns the album art of a given Album, or null if the specified album art cannot be found.
-	 * @param album The Album into which the artwork is defined
+	 * Returns the album art of a given Album_DEPRECATED, or null if the specified album art cannot be found.
+	 * @param album The Album_DEPRECATED into which the artwork is defined
 	 * @return The artwork of the given album, or null if the path to the art cannot be found
 	 */
-	public static Bitmap getAlbumArt(@NonNull Album album) {
+	public static Bitmap getAlbumArt(@NonNull Album_DEPRECATED album) {
 		if(album.getArt() == null) return null;
 		return BitmapFactory.decodeFile(album.getArt());
 	}

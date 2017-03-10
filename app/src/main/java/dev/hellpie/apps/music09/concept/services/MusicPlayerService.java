@@ -42,10 +42,10 @@ import java.util.Timer;
 import dev.hellpie.apps.music09.concept.listeners.MediaPlayerListener;
 import dev.hellpie.apps.music09.concept.listeners.MediaRetrieverListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
-import dev.hellpie.apps.music09.concept.media.models.Playlist;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Playlist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 import dev.hellpie.apps.music09.concept.ui.activities.MainActivity;
 import dev.hellpie.apps.music09.concept.utils.MessagingUtils;
 
@@ -154,8 +154,8 @@ public class MusicPlayerService
 	private Looper serviceLooper;
 
 	// Music related data
-	private LongSparseArray<Song> playingQueue = new LongSparseArray<>(100);
-	private LongSparseArray<Song> playedDeque = new LongSparseArray<>(100);
+	private LongSparseArray<Song_DEPRECATED> playingQueue = new LongSparseArray<>(100);
+	private LongSparseArray<Song_DEPRECATED> playedDeque = new LongSparseArray<>(100);
 	int currentSong = 0; // Current playing song index
 	private long pauseTime = Long.MAX_VALUE; // Point in the song where we last paused playback
 
@@ -243,7 +243,7 @@ public class MusicPlayerService
 	public void onCompletion(MediaPlayer mediaPlayer) {
 		if(playingQueue.size() == 0) {
 			for(int i = 0; i < playedDeque.size(); i++) {
-				Song song = playedDeque.valueAt(i);
+				Song_DEPRECATED song = playedDeque.valueAt(i);
 				if(song ==  null) {
 					stopSelf();
 					return;
@@ -328,29 +328,29 @@ public class MusicPlayerService
 		if(object == null) return;
 
 		Class objClass = object.getClass();
-		if(objClass.isInstance(Song.class)) {
+		if(objClass.isInstance(Song_DEPRECATED.class)) {
 			playingQueue.clear();
 			playedDeque.clear();
-			playingQueue.append(((Song)object).getId(), (Song) object);
-		} else if(objClass.isInstance(Album.class)) {
+			playingQueue.append(((Song_DEPRECATED)object).getId(), (Song_DEPRECATED) object);
+		} else if(objClass.isInstance(Album_DEPRECATED.class)) {
 			playingQueue.clear();
 			playedDeque.clear();
-			List<Song> songs = MediaLibrary.getSongs((Album) object);
-			for(Song song : songs) {
+			List<Song_DEPRECATED> songs = MediaLibrary.getSongs((Album_DEPRECATED) object);
+			for(Song_DEPRECATED song : songs) {
 				playingQueue.append(song.getId(), song);
 			}
-		} else if(objClass.isInstance(Artist.class)) {
+		} else if(objClass.isInstance(Artist_DEPRECATED.class)) {
 			playingQueue.clear();
 			playedDeque.clear();
-			List<Song> songs = MediaLibrary.getSongs((Album) object);
-			for(Song song : songs) {
+			List<Song_DEPRECATED> songs = MediaLibrary.getSongs((Album_DEPRECATED) object);
+			for(Song_DEPRECATED song : songs) {
 				playingQueue.append(song.getId(), song);
 			}
-		} else if(objClass.isInstance(Playlist.class)) {
+		} else if(objClass.isInstance(Playlist_DEPRECATED.class)) {
 			playingQueue.clear();
 			playedDeque.clear();
-			List<Song> songs = MediaLibrary.getSongs();
-			for(Song song: songs) {
+			List<Song_DEPRECATED> songs = MediaLibrary.getSongs();
+			for(Song_DEPRECATED song: songs) {
 				playingQueue.append(song.getId(), song);
 			}
 		}
@@ -402,7 +402,7 @@ public class MusicPlayerService
 		}
 
 		try {
-			Song song = playingQueue.valueAt(currentSong);
+			Song_DEPRECATED song = playingQueue.valueAt(currentSong);
 			if(song == null) {
 				stopSelf();
 				return;

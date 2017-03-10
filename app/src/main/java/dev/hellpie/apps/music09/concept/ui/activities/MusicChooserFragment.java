@@ -38,10 +38,10 @@ import java.util.List;
 import dev.hellpie.apps.music09.concept.R;
 import dev.hellpie.apps.music09.concept.listeners.OnRecyclerViewItemChosenListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
-import dev.hellpie.apps.music09.concept.media.models.Playlist;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Playlist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 import dev.hellpie.apps.music09.concept.ui.views.AlbumRecyclerViewAdapter;
 import dev.hellpie.apps.music09.concept.ui.views.ArtistRecyclerViewAdapter;
 import dev.hellpie.apps.music09.concept.ui.views.SongRecyclerViewAdapter;
@@ -137,16 +137,16 @@ public class MusicChooserFragment extends BottomSheetDialogFragment {
 	private void onCreateAlbumsView(final RecyclerView recyclerView) {
 
 		// Count songs present in each album
-		final List<Album> albums = MediaLibrary.getAlbums();
-		List<Album> countingAlbums = new ArrayList<>(albums.size());
-		for(Album album : albums) {
-			countingAlbums.add(new Album.Builder(album).withTracks(MediaLibrary.getSongs(album).size()).build());
+		final List<Album_DEPRECATED> albums = MediaLibrary.getAlbums();
+		List<Album_DEPRECATED> countingAlbums = new ArrayList<>(albums.size());
+		for(Album_DEPRECATED album : albums) {
+			countingAlbums.add(new Album_DEPRECATED.Builder(album).withTracks(MediaLibrary.getSongs(album).size()).build());
 		}
 
 		recyclerView.setAdapter(
 				new AlbumRecyclerViewAdapter(
 						countingAlbums,
-						new OnRecyclerViewItemChosenListener<Album>() {
+						new OnRecyclerViewItemChosenListener<Album_DEPRECATED>() {
 							@Override
 							public void onRecyclerViewItemChosen(View chosenView) {
 								int position = recyclerView.getChildAdapterPosition(chosenView);
@@ -161,17 +161,17 @@ public class MusicChooserFragment extends BottomSheetDialogFragment {
 	private void onCreateArtistsView(final RecyclerView recyclerView) {
 
 		// Count albums per artist
-		final List<Artist> artists = MediaLibrary.getArtists();
-		List<Artist> countingArtists = new ArrayList<>(artists.size());
-		for(Artist artist : artists) {
-			countingArtists.add(new Artist.Builder(artist).withTracks(MediaLibrary.getSongs(artist).size()).build());
+		final List<Artist_DEPRECATED> artists = MediaLibrary.getArtists();
+		List<Artist_DEPRECATED> countingArtists = new ArrayList<>(artists.size());
+		for(Artist_DEPRECATED artist : artists) {
+			countingArtists.add(new Artist_DEPRECATED.Builder(artist).withTracks(MediaLibrary.getSongs(artist).size()).build());
 		}
 
 		// Initialize the RecyclerView
 		recyclerView.setAdapter(
 				new ArtistRecyclerViewAdapter(
 						countingArtists,
-						new OnRecyclerViewItemChosenListener<Artist>() {
+						new OnRecyclerViewItemChosenListener<Artist_DEPRECATED>() {
 							@Override
 							public void onRecyclerViewItemChosen(View chosenView) {
 								int position = recyclerView.getChildAdapterPosition(chosenView);
@@ -186,29 +186,29 @@ public class MusicChooserFragment extends BottomSheetDialogFragment {
 	private void onCreateSongsView(final RecyclerView recyclerView) {
 
 		// Hacky song instead of a button to avoid custom Dialog layout just for this
-		Song allSongs = new Song.Builder()
-				.withAlbum(Album.NO_ALBUM)
-				.withAlbumId(Album.NO_ALBUM.getId())
+		Song_DEPRECATED allSongs = new Song_DEPRECATED.Builder()
+				.withAlbum(Album_DEPRECATED.NO_ALBUM)
+				.withAlbumId(Album_DEPRECATED.NO_ALBUM.getId())
 				.withId(-1)
 				.withTitle(getContext().getString(R.string.all_songs))
 				.build();
 
 		// Hack the hacky extra song at the top of other songs
-		final List<Song> songs = MediaLibrary.getSongs();
-		final List<Song> hackySongs = new ArrayList<>(songs.size() + 1);
+		final List<Song_DEPRECATED> songs = MediaLibrary.getSongs();
+		final List<Song_DEPRECATED> hackySongs = new ArrayList<>(songs.size() + 1);
 		hackySongs.add(0, allSongs);
-		for(Song song : songs) hackySongs.add(song);
+		for(Song_DEPRECATED song : songs) hackySongs.add(song);
 
 		// Fill the RecyclerView
 		recyclerView.setAdapter(
 				new SongRecyclerViewAdapter(
 						hackySongs,
-						new OnRecyclerViewItemChosenListener<Song>() {
+						new OnRecyclerViewItemChosenListener<Song_DEPRECATED>() {
 							@Override
 							public void onRecyclerViewItemChosen(View chosenView) {
 								int position = recyclerView.getChildAdapterPosition(chosenView);
 								if(position == 0) {
-									listener.onMusicChosen(Playlist.EMPTY_PLAYLIST); // Default for All-Songs
+									listener.onMusicChosen(Playlist_DEPRECATED.EMPTY_PLAYLIST); // Default for All-Songs
 								} else {
 									listener.onMusicChosen(songs.get(position - 1));
 								}

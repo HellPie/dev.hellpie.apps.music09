@@ -68,10 +68,10 @@ import dev.hellpie.apps.music09.concept.R;
 import dev.hellpie.apps.music09.concept.listeners.MediaPlayerListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
 import dev.hellpie.apps.music09.concept.media.MediaRetriever;
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
-import dev.hellpie.apps.music09.concept.media.models.Playlist;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Playlist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 import dev.hellpie.apps.music09.concept.services.UpdateReadyReceiver;
 import dev.hellpie.apps.music09.concept.ui.resources.AnimatedPlayPauseDrawable;
 import dev.hellpie.apps.music09.concept.ui.views.SquareView;
@@ -116,7 +116,7 @@ public class PlayerActivity extends AppCompatActivity
 	// MUSIC PLAYER STUFF
 
 	private MediaPlayer mediaPlayer;
-	private final List<Song> tracksQueue = Collections.synchronizedList(new ArrayList<Song>(50));
+	private final List<Song_DEPRECATED> tracksQueue = Collections.synchronizedList(new ArrayList<Song_DEPRECATED>(50));
 	private int currentIndex = 0;
 	private Handler timeUpdaterHandler = new Handler();
 	Runnable timeUpdaterRunnable;
@@ -338,15 +338,15 @@ public class PlayerActivity extends AppCompatActivity
 	@Override
 	public void onMusicChosen(Object choice) {
 
-		List<Song> chosenTracks = new ArrayList<>();
+		List<Song_DEPRECATED> chosenTracks = new ArrayList<>();
 
-		if(choice instanceof Song) {
-			chosenTracks.add((Song) choice);
-		} else if(choice instanceof Album) {
-			chosenTracks.addAll(MediaLibrary.getSongs((Album) choice));
-		} else if(choice instanceof Artist) {
-			chosenTracks.addAll(MediaLibrary.getSongs((Artist) choice));
-		} else if(choice instanceof Playlist) {
+		if(choice instanceof Song_DEPRECATED) {
+			chosenTracks.add((Song_DEPRECATED) choice);
+		} else if(choice instanceof Album_DEPRECATED) {
+			chosenTracks.addAll(MediaLibrary.getSongs((Album_DEPRECATED) choice));
+		} else if(choice instanceof Artist_DEPRECATED) {
+			chosenTracks.addAll(MediaLibrary.getSongs((Artist_DEPRECATED) choice));
+		} else if(choice instanceof Playlist_DEPRECATED) {
 			chosenTracks.addAll(MediaLibrary.getSongs());
 		}
 
@@ -409,7 +409,7 @@ public class PlayerActivity extends AppCompatActivity
 		mediaPlayer.seekTo(0);
 	}
 
-	private void shuffleMusic(List<Song> queue) {
+	private void shuffleMusic(List<Song_DEPRECATED> queue) {
 
 		// Shuffle music
 		Collections.shuffle(queue, new Random(System.currentTimeMillis()));
@@ -427,7 +427,7 @@ public class PlayerActivity extends AppCompatActivity
 
 	private void playCurrentSong() {
 		// Obtain the song
-		Song song = tracksQueue.get(currentIndex);
+		Song_DEPRECATED song = tracksQueue.get(currentIndex);
 
 		// Update the layouts for the new song (before starting playback 'cause it takes more time and is async)
 		updateViewsContent(song);
@@ -453,7 +453,7 @@ public class PlayerActivity extends AppCompatActivity
 		mediaPlayer.setOnErrorListener(this); // Whoopsies
 	}
 
-	private void updateViewsContent(final Song song) {
+	private void updateViewsContent(final Song_DEPRECATED song) {
 
 		// Fallback already initialized in case song has no album art
 		Drawable albumArtDrawable = VectorDrawableCompat.create(

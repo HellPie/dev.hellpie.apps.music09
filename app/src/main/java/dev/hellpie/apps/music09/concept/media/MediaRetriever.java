@@ -25,9 +25,9 @@ import android.support.annotation.NonNull;
 import java.lang.ref.WeakReference;
 
 import dev.hellpie.apps.music09.concept.listeners.MediaRetrieverListener;
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 import dev.hellpie.apps.music09.concept.utils.ContextExpiredException;
 
 /**
@@ -131,9 +131,9 @@ public class MediaRetriever {
 			long albumId = results.getLong(albumIdCol);
 			long artistId = results.getLong(artistIdCol);
 
-			Album album = loadAlbum(albumId);
-			Artist artist = loadArtist(artistId);
-			Song song = new Song.Builder()
+			Album_DEPRECATED album = loadAlbum(albumId);
+			Artist_DEPRECATED artist = loadArtist(artistId);
+			Song_DEPRECATED song = new Song_DEPRECATED.Builder()
 					.withId(results.getLong(idCol))
 					.withTitle(results.getString(titleCol))
 					.withArtistName(results.getString(artistCol))
@@ -146,8 +146,8 @@ public class MediaRetriever {
 					.withArtistId(artistId)
 					.build();
 
-			if(album.getId() != Album.NO_ALBUM.getId()) MediaLibrary.add(album);
-			if(artist.getId() != Artist.NO_ARTIST.getId()) MediaLibrary.add(artist);
+			if(album.getId() != Album_DEPRECATED.NO_ALBUM.getId()) MediaLibrary.add(album);
+			if(artist.getId() != Artist_DEPRECATED.NO_ARTIST.getId()) MediaLibrary.add(artist);
 			MediaLibrary.add(song);
 		}
 
@@ -156,7 +156,7 @@ public class MediaRetriever {
 	}
 
 	@NonNull
-	private Album loadAlbum(long id) throws ContextExpiredException {
+	private Album_DEPRECATED loadAlbum(long id) throws ContextExpiredException {
 		checkContext(String.format("loadAlbum(long id = %s)", String.valueOf(id)));
 
 		Uri uri = MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI;
@@ -164,7 +164,7 @@ public class MediaRetriever {
 		Cursor result = context.get().getContentResolver().query(uri, ALBUM_TABLE_COLUMNS, query, null, null);
 
 		// Either we have no result, or we have an empty row, we know we don't have an album
-		if(result == null || result.getCount() < 1) return Album.NO_ALBUM;
+		if(result == null || result.getCount() < 1) return Album_DEPRECATED.NO_ALBUM;
 
 		final int idCol = result.getColumnIndex(MediaStore.Audio.Albums._ID);
 		final int nameCol = result.getColumnIndex(MediaStore.Audio.Albums.ALBUM);
@@ -174,7 +174,7 @@ public class MediaRetriever {
 
 		result.moveToPosition(0);
 
-		Album album = new Album.Builder()
+		Album_DEPRECATED album = new Album_DEPRECATED.Builder()
 				.withId(result.getLong(idCol))
 				.withName(result.getString(nameCol))
 				.withArtist(result.getString(artistCol))
@@ -186,7 +186,7 @@ public class MediaRetriever {
 		return album;
 	}
 
-	private Artist loadArtist(long id) throws ContextExpiredException {
+	private Artist_DEPRECATED loadArtist(long id) throws ContextExpiredException {
 		checkContext(String.format("loadArtist(long id  = %s)", String.valueOf(id)));
 
 		Uri uri = MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI;
@@ -194,7 +194,7 @@ public class MediaRetriever {
 		Cursor result = context.get().getContentResolver().query(uri, ARTIST_TABLE_COLUMNS, query, null, null);
 
 		// Either we have no result or we have an empty row, we know we don't have artists
-		if(result == null || result.getCount() < 1) return Artist.NO_ARTIST;
+		if(result == null || result.getCount() < 1) return Artist_DEPRECATED.NO_ARTIST;
 
 		final int idCol = result.getColumnIndex(MediaStore.Audio.Artists._ID);
 		final int nameCol = result.getColumnIndex(MediaStore.Audio.Artists.ARTIST);
@@ -202,7 +202,7 @@ public class MediaRetriever {
 
 		result.moveToPosition(0);
 
-		Artist artist = new Artist.Builder()
+		Artist_DEPRECATED artist = new Artist_DEPRECATED.Builder()
 				.withId(result.getLong(idCol))
 				.withName(result.getString(nameCol))
 				.withTracks(result.getInt(numCol))

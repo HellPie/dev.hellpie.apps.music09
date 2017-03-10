@@ -16,88 +16,35 @@
 
 package dev.hellpie.apps.music09.concept.media.models;
 
-public class Album {
+import android.support.annotation.NonNull;
 
-	public static final Album NO_ALBUM = new Album();
+import org.parceler.Parcel;
 
-	private long id;
-	private String name = "";
-	private String artist = "";
-	private String art = null;
-	private int tracks = 0;
+import java.util.Collections;
+import java.util.List;
 
-	private Album() {}
+@Parcel
+public class Album extends TrackList {
 
-	public long getId() {
-		return id;
+	public static final Album EMPTY = new Album(-1, "", "", "", -1, Collections.<String>emptyList());
+
+	public final long id;
+	@NonNull public final String name;
+	@NonNull public final String artist;
+	@NonNull public final String art;
+	public final int year;
+
+	public Album(long id, @NonNull String name, @NonNull String artist, @NonNull String art, int year, @NonNull List<String> tracks) {
+		super(tracks);
+		this.id = id;
+		this.name = name;
+		this.artist = artist;
+		this.art = art;
+		this.year = year;
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public String getArtist() {
-		return artist;
-	}
-
-	public String getArt() {
-		return art;
-	}
-
-	public int getTracks() {
-		return tracks;
-	}
-
-	public static final class Builder {
-
-		private long id;
-		private String name = "";
-		private String artist = "";
-		private String art = null;
-		private int tracks = 0;
-
-		public Builder() {}
-		public Builder(Album base) {
-			id = base.id;
-			name = base.name;
-			artist = base.artist;
-			art = base.art;
-			tracks = base.tracks;
-		}
-
-		public Builder withId(long id) {
-			this.id = id;
-			return this;
-		}
-
-		public Builder withName(String name) {
-			if(name != null) this.name = name;
-			return this;
-		}
-
-		public Builder withArtist(String artist) {
-			if(artist != null) this.artist = artist;
-			return this;
-		}
-
-		public Builder withArt(String art) {
-			this.art = art;
-			return this;
-		}
-
-		public Builder withTracks(int tracks) {
-			this.tracks = tracks;
-			return this;
-		}
-
-		public Album build() {
-			Album album = new Album();
-			album.id = id;
-			album.name = name;
-			album.artist = artist;
-			album.art = art;
-			album.tracks = tracks;
-			return album;
-		}
+	@Override
+	public boolean equals(Object obj) {
+		return this == obj || (obj != null && obj instanceof Album && id == ((Album) obj).id);
 	}
 }

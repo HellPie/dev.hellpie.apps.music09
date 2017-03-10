@@ -16,62 +16,25 @@
 
 package dev.hellpie.apps.music09.concept.media.models;
 
+import android.support.annotation.NonNull;
+
+import org.parceler.Parcel;
+
+import java.util.Collections;
+import java.util.List;
+
+@Parcel
 public class Artist {
 
-	public static final Artist NO_ARTIST = new Artist();
+	public static final Artist EMPTY = new Artist(-1, "", Collections.<Album>emptyList());
 
-	private long id;
-	private String name = "";
-	private int tracks = 0;
+	public final long id;
+	@NonNull public final String name;
+	@NonNull public final List<Album> albums;
 
-	private Artist() {}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public int getTracks() {
-		return tracks;
-	}
-
-	public static class Builder {
-
-		private long id;
-		private String name = "";
-		private int tracks = 0;
-
-		public Builder() {}
-		public Builder(Artist artist) {
-			id = artist.id;
-			name = artist.name;
-			tracks = artist.tracks;
-		}
-
-		public Builder withId(long id) {
-			this.id = id;
-			return this;
-		}
-
-		public Builder withName(String name) {
-			if(name != null) this.name = name;
-			return this;
-		}
-
-		public Builder withTracks(int count) {
-			this.tracks = count;
-			return this;
-		}
-
-		public Artist build() {
-			Artist artist = new Artist();
-			artist.id = id;
-			artist.name = name;
-			artist.tracks = tracks;
-			return artist;
-		}
+	public Artist(long id, @NonNull String name, @NonNull List<Album> albums) {
+		this.id = id;
+		this.name = name;
+		this.albums = albums;
 	}
 }

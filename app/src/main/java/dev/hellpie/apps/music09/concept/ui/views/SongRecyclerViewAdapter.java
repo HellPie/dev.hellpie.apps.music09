@@ -30,11 +30,11 @@ import java.util.List;
 import dev.hellpie.apps.music09.concept.R;
 import dev.hellpie.apps.music09.concept.listeners.OnRecyclerViewItemChosenListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 
-public class SongRecyclerViewAdapter extends BaseRecyclerViewAdapter<Song, SongRecyclerViewAdapter.SongViewHolder> {
+public class SongRecyclerViewAdapter extends BaseRecyclerViewAdapter<Song_DEPRECATED, SongRecyclerViewAdapter.SongViewHolder> {
 
-	public SongRecyclerViewAdapter(List<Song> content, OnRecyclerViewItemChosenListener<Song> listener) {
+	public SongRecyclerViewAdapter(List<Song_DEPRECATED> content, OnRecyclerViewItemChosenListener<Song_DEPRECATED> listener) {
 		super(content, listener, R.layout.viewholder_song);
 	}
 
@@ -44,14 +44,14 @@ public class SongRecyclerViewAdapter extends BaseRecyclerViewAdapter<Song, SongR
 	}
 
 	@Override
-	protected void onBindViewHolderToItem(SongViewHolder viewHolder, Song item) {
+	protected void onBindViewHolderToItem(SongViewHolder viewHolder, Song_DEPRECATED item) {
 		Context context = viewHolder.albumArt.getContext();
 
 		Bitmap albumArt = null;
 		if(content.indexOf(item) != 0) albumArt = MediaLibrary.getAlbumArt(item);
 
 		Drawable imageDrawable;
-		if(albumArt == null) { // No Album Art found, generate fallback
+		if(albumArt == null) { // No Album_DEPRECATED Art found, generate fallback
 			imageDrawable = VectorDrawableCompat.create(
 					context.getResources(),
 					R.drawable.ic_audiotrack,

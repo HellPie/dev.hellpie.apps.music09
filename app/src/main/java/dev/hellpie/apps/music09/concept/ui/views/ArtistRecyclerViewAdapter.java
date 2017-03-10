@@ -30,13 +30,13 @@ import java.util.List;
 import dev.hellpie.apps.music09.concept.R;
 import dev.hellpie.apps.music09.concept.listeners.OnRecyclerViewItemChosenListener;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
 
-public class ArtistRecyclerViewAdapter extends BaseRecyclerViewAdapter<Artist, ArtistRecyclerViewAdapter.ArtistViewHolder> {
+public class ArtistRecyclerViewAdapter extends BaseRecyclerViewAdapter<Artist_DEPRECATED, ArtistRecyclerViewAdapter.ArtistViewHolder> {
 
 
-	public ArtistRecyclerViewAdapter(List<Artist> content, OnRecyclerViewItemChosenListener<Artist> listener) {
+	public ArtistRecyclerViewAdapter(List<Artist_DEPRECATED> content, OnRecyclerViewItemChosenListener<Artist_DEPRECATED> listener) {
 		super(content, listener, R.layout.viewholder_artist);
 	}
 
@@ -46,24 +46,24 @@ public class ArtistRecyclerViewAdapter extends BaseRecyclerViewAdapter<Artist, A
 	}
 
 	@Override
-	protected void onBindViewHolderToItem(ArtistViewHolder viewHolder, Artist item) {
+	protected void onBindViewHolderToItem(ArtistViewHolder viewHolder, Artist_DEPRECATED item) {
 
 
 		Context context = viewHolder.albumArt.getContext();
 
 		// Get all albums for that artist
-		List<Album> albums = MediaLibrary.getAlbums(item);
+		List<Album_DEPRECATED> albums = MediaLibrary.getAlbums(item);
 		Bitmap albumArt = null;
-		for(Album album : albums) { // Selected the first album with an album art
+		for(Album_DEPRECATED album : albums) { // Selected the first album with an album art
 			albumArt = MediaLibrary.getAlbumArt(album);
 			if(albumArt != null) break;
 		}
 
 		Drawable imageDrawable;
-		if(albumArt == null) { // No Album Art found, generate fallback
+		if(albumArt == null) { // No Album_DEPRECATED Art found, generate fallback
 			imageDrawable = VectorDrawableCompat.create(
 					context.getResources(),
-					R.drawable.ic_person,
+					R.drawable.ic_artist,
 					context.getTheme()
 			);
 		} else {

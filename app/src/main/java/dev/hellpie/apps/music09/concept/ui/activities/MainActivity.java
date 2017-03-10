@@ -51,10 +51,10 @@ import java.lang.ref.WeakReference;
 import dev.hellpie.apps.music09.concept.R;
 import dev.hellpie.apps.music09.concept.media.MediaLibrary;
 import dev.hellpie.apps.music09.concept.media.MediaRetriever;
-import dev.hellpie.apps.music09.concept.media.models.Album;
-import dev.hellpie.apps.music09.concept.media.models.Artist;
-import dev.hellpie.apps.music09.concept.media.models.Playlist;
-import dev.hellpie.apps.music09.concept.media.models.Song;
+import dev.hellpie.apps.music09.concept.media.models.Album_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Artist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Playlist_DEPRECATED;
+import dev.hellpie.apps.music09.concept.media.models.Song_DEPRECATED;
 import dev.hellpie.apps.music09.concept.services.BaseServiceConnection;
 import dev.hellpie.apps.music09.concept.services.LeakSafeHandler;
 import dev.hellpie.apps.music09.concept.services.MusicPlayerService;
@@ -208,14 +208,14 @@ public class MainActivity extends AppCompatActivity
 		final MediaRetriever mediaRetriever = new MediaRetriever(this);
 		mediaRetriever.loadLibrary();
 
-		Song song = null;
-		for(Song track : MediaLibrary.getSongs()) {
+		Song_DEPRECATED song = null;
+		for(Song_DEPRECATED track : MediaLibrary.getSongs()) {
 			if(track.getAlbumName().toLowerCase().contains("Sun".toLowerCase())) song = track;
 		}
 
 		if(song != null) MainActivity.this.onPlayingSongChanged(song);
 
-		executeAction(MusicPlayerService.ACTION_PLAY, new Playlist());
+		executeAction(MusicPlayerService.ACTION_PLAY, new Playlist_DEPRECATED());
 	}
 
 	@Override
@@ -269,20 +269,20 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public void onMusicChosen(Object choice) {
-		if(choice instanceof Song) {
-			// Song chosen
-			onPlayingSongChanged((Song) choice);
-		} else if(choice instanceof Album) {
+		if(choice instanceof Song_DEPRECATED) {
+			// Song_DEPRECATED chosen
+			onPlayingSongChanged((Song_DEPRECATED) choice);
+		} else if(choice instanceof Album_DEPRECATED) {
 			//
 
 			//TODO: Remove debug code
-			onPlayingSongChanged(MediaLibrary.getSongs((Album) choice).get(0));
+			onPlayingSongChanged(MediaLibrary.getSongs((Album_DEPRECATED) choice).get(0));
 		} else //noinspection StatementWithEmptyBody
-			if(choice instanceof Artist) {
+			if(choice instanceof Artist_DEPRECATED) {
 			//
 		} else //noinspection StatementWithEmptyBody
-			if(choice instanceof Playlist) {
-			// Playlist contains all the songs, so just play them all randomly
+			if(choice instanceof Playlist_DEPRECATED) {
+			// Playlist_DEPRECATED contains all the songs, so just play them all randomly
 		}
 	}
 
@@ -348,8 +348,8 @@ public class MainActivity extends AppCompatActivity
 		playPauseSongFAB.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLight));
 	}
 
-	// TODO: Clean up onPlayingSongChanged(Song) { ... } (View other TODOs for more info)
-	public void onPlayingSongChanged(final Song song) {
+	// TODO: Clean up onPlayingSongChanged(Song_DEPRECATED) { ... } (View other TODOs for more info)
+	public void onPlayingSongChanged(final Song_DEPRECATED song) {
 		Bitmap artwork = MediaLibrary.getAlbumArt(song);
 		if(artwork == null) {
 			runOnUiThread(new Runnable() {
@@ -511,12 +511,12 @@ public class MainActivity extends AppCompatActivity
 		onProgressChanged(songTimelineSeekBar, message.arg1, false);
 	}
 
-	// TODO: Merge onPlayingSongChanged(Song) { ... } with onMusicChangedEvent(Message) { ... }
+	// TODO: Merge onPlayingSongChanged(Song_DEPRECATED) { ... } with onMusicChangedEvent(Message) { ... }
 	private void onMusicChangedEvent(Message message) {
 		Object obj = message.obj; // Proguard might force instanceof for to fail when optimizing
-		if(!(obj instanceof Song)) return;
+		if(!(obj instanceof Song_DEPRECATED)) return;
 
-		onPlayingSongChanged((Song) obj);
+		onPlayingSongChanged((Song_DEPRECATED) obj);
 	}
 
 	private void onMusicStoppedEvent() {

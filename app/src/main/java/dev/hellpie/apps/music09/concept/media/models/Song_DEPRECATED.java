@@ -16,7 +16,11 @@
 
 package dev.hellpie.apps.music09.concept.media.models;
 
-public class Song {
+/**
+ * This class is DEPRECATED - Use the new "Track" class instead.
+ */
+@Deprecated
+public class Song_DEPRECATED {
 
 	private long id = -1L;
 	private String title = "";
@@ -24,8 +28,8 @@ public class Song {
 	private String albumName = "";
 	private String location = "";
 	private long duration = 0;
-	private Album album = Album.NO_ALBUM;
-	private Artist artist = Artist.NO_ARTIST;
+	private Album_DEPRECATED album = Album_DEPRECATED.NO_ALBUM;
+	private Artist_DEPRECATED artist = Artist_DEPRECATED.NO_ARTIST;
 	private long albumId = -1L;
 	private long artistId = -1L;
 
@@ -45,11 +49,11 @@ public class Song {
 		return albumName;
 	}
 
-	public Album getAlbum() {
+	public Album_DEPRECATED getAlbum() {
 		return album;
 	}
 
-	public Artist getArtist() {
+	public Artist_DEPRECATED getArtist() {
 		return artist;
 	}
 
@@ -77,8 +81,8 @@ public class Song {
 		private String artistName = "";
 		private String location = "";
 		private long duration = 0;
-		private Album album = Album.NO_ALBUM;
-		private Artist artist = Artist.NO_ARTIST;
+		private Album_DEPRECATED album = Album_DEPRECATED.NO_ALBUM;
+		private Artist_DEPRECATED artist = Artist_DEPRECATED.NO_ARTIST;
 		private long albumId = -1L;
 		private long artistId = -1L;
 
@@ -112,12 +116,12 @@ public class Song {
 			return this;
 		}
 
-		public Builder withAlbum(Album album) {
+		public Builder withAlbum(Album_DEPRECATED album) {
 			if(album != null) this.album = album;
 			return this;
 		}
 
-		public Builder withArtist(Artist artist) {
+		public Builder withArtist(Artist_DEPRECATED artist) {
 			if(artist != null) this.artist = artist;
 			return this;
 		}
@@ -132,8 +136,8 @@ public class Song {
 			return this;
 		}
 
-		public Song build() {
-			Song song = new Song();
+		public Song_DEPRECATED build() {
+			Song_DEPRECATED song = new Song_DEPRECATED();
 			song.id = id;
 			song.title = title;
 			song.artistName = artistName;

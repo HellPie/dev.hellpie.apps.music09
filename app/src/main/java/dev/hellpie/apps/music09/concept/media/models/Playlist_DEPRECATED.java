@@ -19,9 +19,13 @@ package dev.hellpie.apps.music09.concept.media.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Playlist {
+/**
+ * This class is DEPRECATED - Use the new "Playlist" class instead.
+ */
+@Deprecated
+public class Playlist_DEPRECATED {
 
-	public static final Playlist EMPTY_PLAYLIST = new Playlist();
+	public static final Playlist_DEPRECATED EMPTY_PLAYLIST = new Playlist_DEPRECATED();
 
 	private long id;
 	private List<Long> songs = new ArrayList<>();
